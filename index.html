@@ -314,6 +314,108 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 .page-hero{text-align:center;padding:24px 0 8px;margin-bottom:8px}
 .page-hero h1{font-family:var(--font-mc);font-size:10px;color:var(--green);text-shadow:0 0 20px rgba(0,255,136,0.5);letter-spacing:.1em;line-height:2}
 .page-hero p{font-size:13px;color:var(--text3);margin-top:8px}
+
+/* ══ ENCHANTMENT CMD APPEAR ANIMATION ══ */
+@keyframes cmdAppear{
+  0%{opacity:0;transform:translateY(6px) scale(0.98);text-shadow:0 0 30px rgba(0,255,136,0.9)}
+  60%{opacity:1;transform:translateY(-1px) scale(1.004)}
+  100%{opacity:1;transform:translateY(0) scale(1);text-shadow:0 0 10px rgba(0,255,136,0.25)}
+}
+.cmd-appear{animation:cmdAppear .5s cubic-bezier(0.16,1,0.3,1) both}
+
+/* ══ ENCHANTED GLOW on enchcmd-box when has content ══ */
+.enchcmd-box.has-cmd{
+  border-color:rgba(0,255,136,0.3);
+  box-shadow:0 0 28px rgba(0,255,136,0.1),inset 0 0 20px rgba(0,255,136,0.03);
+  animation:enchBoxPulse 3s ease-in-out infinite alternate;
+}
+@keyframes enchBoxPulse{
+  0%{box-shadow:0 0 20px rgba(0,255,136,0.08),inset 0 0 12px rgba(0,255,136,0.02)}
+  100%{box-shadow:0 0 36px rgba(0,255,136,0.18),inset 0 0 24px rgba(0,255,136,0.06)}
+}
+
+/* ══ PARTICLE BURST on copy ══ */
+@keyframes burstPop{0%{transform:scale(0) translateY(0);opacity:1}100%{transform:scale(1.5) translateY(-40px);opacity:0}}
+.copy-burst{position:fixed;pointer-events:none;font-size:18px;z-index:9999;animation:burstPop .7s ease-out forwards}
+
+/* ══ FLOATING ENCHANT SPARKLES ══ */
+@keyframes sparkleFloat{
+  0%{transform:translateY(0) scale(1);opacity:0.8}
+  50%{opacity:1}
+  100%{transform:translateY(-60px) scale(0);opacity:0}
+}
+.ench-sparkle{position:absolute;pointer-events:none;font-size:12px;animation:sparkleFloat 1.2s ease-out forwards;z-index:20}
+
+/* ══ CARD ENTRANCE STAGGER ══ */
+.card:nth-child(1){animation-delay:.0s}
+.card:nth-child(2){animation-delay:.07s}
+.card:nth-child(3){animation-delay:.14s}
+.card:nth-child(4){animation-delay:.21s}
+
+/* ══ SCANNING LINE ON OUTBOX ══ */
+.outbox{position:relative;overflow:hidden}
+.outbox::after{
+  content:'';position:absolute;top:-100%;left:0;right:0;height:40%;
+  background:linear-gradient(transparent,rgba(0,255,136,0.04),transparent);
+  animation:scanLine 4s ease-in-out infinite;pointer-events:none;
+}
+@keyframes scanLine{0%,100%{top:-100%}50%{top:200%}}
+
+/* ══ IBTN HOVER GLOW ══ */
+.ibtn:hover .ii{
+  filter:drop-shadow(0 0 8px rgba(251,191,36,0.7));
+  animation:iconWobble .3s ease-in-out;
+}
+@keyframes iconWobble{0%{transform:scale(1)}40%{transform:scale(1.25) rotate(-8deg)}70%{transform:scale(0.95) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
+
+/* ══ ACTIVE ENCH ROW SHINE ══ */
+.ench-row.checked{
+  background:linear-gradient(135deg,rgba(167,139,250,0.07),rgba(167,139,250,0.02));
+  border-color:rgba(167,139,250,0.45);
+  box-shadow:0 2px 16px rgba(167,139,250,0.1);
+}
+
+/* ══ ETAG ENTRANCE ══ */
+@keyframes tagPop{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.etag{animation:tagPop .25s cubic-bezier(0.175,0.885,0.32,1.275) both}
+
+/* ══ LEVEL NUM BOUNCE ══ */
+@keyframes lvlBounce{0%{transform:scale(1)}40%{transform:scale(1.5) translateY(-2px);color:var(--yellow)}100%{transform:scale(1)}}
+.lvl-bounce{animation:lvlBounce .25s ease both}
+
+/* ══ VERSION BADGE GLOW ══ */
+.vpill.am,.vpill.al,.vpill.ape{position:relative;overflow:hidden}
+.vpill.am::after,.vpill.al::after,.vpill.ape::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.18) 50%,transparent 100%);
+  transform:translateX(-100%);animation:vpillShine 3s ease-in-out infinite;
+}
+@keyframes vpillShine{0%,70%{transform:translateX(-100%)}80%,100%{transform:translateX(200%)}}
+
+/* ══ FLOATING ORB DECORATIONS ══ */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(60px);animation:orbFloat 8s ease-in-out infinite alternate}
+.orb-1{width:300px;height:300px;background:rgba(0,255,136,0.035);top:10%;right:-80px;animation-duration:9s}
+.orb-2{width:250px;height:250px;background:rgba(56,189,248,0.03);bottom:15%;left:-60px;animation-duration:11s;animation-direction:alternate-reverse}
+.orb-3{width:200px;height:200px;background:rgba(167,139,250,0.025);top:50%;right:15%;animation-duration:7s}
+@keyframes orbFloat{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-30px) scale(1.08)}}
+
+/* ══ ENCHANTMENT VERSION BADGE ══ */
+.ench-version-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:#c4b5fd;letter-spacing:.08em;margin-bottom:10px;animation:badgePulse 2s ease-in-out infinite alternate}
+@keyframes badgePulse{0%{box-shadow:0 0 0px rgba(167,139,250,0)}100%{box-shadow:0 0 12px rgba(167,139,250,0.3)}}
+
+/* ══ COPY SUCCESS FLASH RING ══ */
+@keyframes ringOut{0%{transform:scale(1);opacity:.8;box-shadow:0 0 0 0 rgba(0,255,136,0.5)}100%{transform:scale(1.03);opacity:0;box-shadow:0 0 0 20px rgba(0,255,136,0)}}
+.copybtn.flash{animation:ringOut .6s ease-out,none}
+
+/* ══ GLITCH EFFECT ON LOGO HOVER ══ */
+.nav-logo:hover span{animation:glitch .4s steps(2) both}
+@keyframes glitch{
+  0%{text-shadow:0 0 14px rgba(0,255,136,0.5)}
+  25%{text-shadow:-2px 0 8px rgba(56,189,248,0.8),2px 0 8px rgba(248,113,113,0.8)}
+  50%{text-shadow:2px 0 8px rgba(167,139,250,0.8),-2px 0 8px rgba(0,255,136,0.8)}
+  75%{text-shadow:-1px 0 12px rgba(0,255,136,0.6)}
+  100%{text-shadow:0 0 14px rgba(0,255,136,0.5)}
+}
 </style>
 </head>
 <body>
@@ -321,6 +423,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 <div class="grid-bg"></div>
 <div class="ambient"></div>
 <canvas id="particles"></canvas>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
 <!-- ══ TOP NAV ══ -->
 <nav class="topnav">
@@ -625,6 +730,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
       <!-- output -->
       <div class="ench-out-box">
         <div class="ctitle"><em>◈</em> Команда /give</div>
+        <div id="ench-version-badge" class="ench-version-badge">✦ 1.18+ · Java Edition</div>
         <div class="ename-row">
           <input class="ename-input" id="ename-input" placeholder="Кастомное имя (опционально)..." oninput="updateEnchOutput()">
           <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
@@ -771,6 +877,13 @@ function setVersion(v){
   if(cbCmd){
     if(v==='pe')cbCmd.textContent='/give @s command_block 1';
     else cbCmd.textContent='/give @s command_block';
+  }
+  // Update enchantment version badge
+  const badge=document.getElementById('ench-version-badge');
+  if(badge){
+    if(v==='modern') badge.innerHTML='✦ 1.18+ · Java Edition · NBT формат';
+    else if(v==='pe') badge.innerHTML='📱 Bedrock / PE Edition · ench формат';
+    else badge.innerHTML='⚙ Legacy 1.8 · числовые ID зачарований';
   }
   generate();updateEnchOutput();
 }
@@ -1006,6 +1119,14 @@ function toggleEnch(key){
     const conflicted=e.conflicts.some(c=>selectedEnch[c]);
     if(conflicted)return;
     selectedEnch[key]=1;
+    /* mini sparkle on check */
+    const chk=document.getElementById('chk-'+key);
+    if(chk){
+      const r=chk.getBoundingClientRect();
+      const sp=document.createElement('div');sp.className='ench-sparkle';
+      sp.textContent='✦';sp.style.left=(r.left-4)+'px';sp.style.top=(r.top+window.scrollY)+'px';
+      document.body.appendChild(sp);setTimeout(()=>sp.remove(),1300);
+    }
   }
   renderEnchList();updateEnchOutput();
 }
@@ -1013,11 +1134,26 @@ function changeLvl(key,delta){
   if(!selectedEnch[key])return;
   const e=ENCHANTS[key];
   selectedEnch[key]=Math.max(1,Math.min(e.max,selectedEnch[key]+delta));
-  document.getElementById('lvl-'+key).textContent=selectedEnch[key];
+  const el=document.getElementById('lvl-'+key);
+  el.textContent=selectedEnch[key];
+  el.classList.remove('lvl-bounce');void el.offsetWidth;el.classList.add('lvl-bounce');
   updateEnchOutput();
 }
 
 function toRoman(n){const r=['','I','II','III','IV','V'];return r[n]||n;}
+
+/* Числовые ID зачарований для Legacy (1.8) */
+const ENCH_IDS={
+  protection:0,fire_protection:1,feather_falling:2,blast_protection:3,projectile_protection:4,
+  respiration:5,aqua_affinity:6,thorns:7,depth_strider:8,frost_walker:9,
+  sharpness:16,smite:17,bane_of_arthropods:18,knockback:19,fire_aspect:20,looting:21,sweeping_edge:22,
+  efficiency:32,silk_touch:33,unbreaking:34,fortune:35,
+  power:48,punch:49,flame:50,infinity:51,
+  luck_of_the_sea:61,lure:62,
+  loyalty:65,impaling:66,riptide:67,channeling:68,
+  multishot:33,quick_charge:35,piercing:34,
+  mending:70,curse_of_vanishing:71,curse_of_binding:10,soul_speed:11,swift_sneak:12
+};
 
 function updateEnchOutput(){
   const ms=document.getElementById('mat-select');
@@ -1040,27 +1176,35 @@ function updateEnchOutput(){
 
   let cmd='';
   if(version==='modern'){
-    if(keys.length){
-      cmd=`/give @s minecraft:${mcId}[enchantments={levels:{${keys.map(k=>`"minecraft:${k}":${selectedEnch[k]}`).join(',')}}}`+(customName?`,custom_name='{"text":"${customName}"}'`:'')+`] ${count}`;
-    } else {
-      cmd=`/give @s minecraft:${mcId}[custom_name='{"text":"${customName}"}'] ${count}`;
-    }
+    /* 1.18+ формат: /give @s minecraft:item{display:{Name:'{"text":"..."}'},Enchantments:[{id:"minecraft:X",lvl:Ns}]} count */
+    let nbtParts=[];
+    if(customName) nbtParts.push(`display:{Name:'{"text":"${customName}"}'}`) ;
+    if(keys.length) nbtParts.push(`Enchantments:[${keys.map(k=>`{id:"minecraft:${k}",lvl:${selectedEnch[k]}s}`).join(',')}]`);
+    const nbt=nbtParts.length?`{${nbtParts.join(',')}}`:'' ;
+    cmd=`/give @s minecraft:${mcId}${nbt} ${count}`;
   } else if(version==='pe'){
-    let enchStr=keys.map(k=>`{"id":"${k}","lvl":${selectedEnch[k]}}`).join(',');
-    let nameStr=customName?`"display":{"Name":"${customName}"},`:'';
-    let tag=nameStr+(keys.length?`"ench":[${enchStr}]`:'');
-    cmd=`/give @s ${mcId} ${count} 0 {${tag}}`;
+    /* Bedrock/PE: /give @s item count 0 {display:{Name:"..."},ench:[{id:"X",lvl:N}]} */
+    let nbtParts=[];
+    if(customName) nbtParts.push(`display:{Name:"${customName}"}`);
+    if(keys.length) nbtParts.push(`ench:[${keys.map(k=>`{id:"${k}",lvl:${selectedEnch[k]}}`).join(',')}]`);
+    const nbt=nbtParts.length?` {${nbtParts.join(',')}}`:'' ;
+    cmd=`/give @s ${mcId} ${count} 0${nbt}`;
   } else {
-    let enchStr=keys.map(k=>`{id:${k},lvl:${selectedEnch[k]}s}`).join(',');
-    let nameStr=customName?`display:{Name:"${customName}"},`:'';
-    let tag=nameStr+(keys.length?`ench:[${enchStr}]`:'');
-    cmd=`/give @s ${mcId} ${count} 0 {${tag}}`;
+    /* Legacy 1.8: числовые ID, /give @p item count 0 {display:{Name:"..."},ench:[{id:NUM,lvl:Ns}]} */
+    let nbtParts=[];
+    if(customName) nbtParts.push(`display:{Name:"${customName}"}`);
+    if(keys.length) nbtParts.push(`ench:[${keys.map(k=>`{id:${ENCH_IDS[k]??0},lvl:${selectedEnch[k]}s}`).join(',')}]`);
+    const nbt=nbtParts.length?` {${nbtParts.join(',')}}`:'' ;
+    cmd=`/give @p ${mcId} ${count} 0${nbt}`;
   }
   box.textContent=cmd;
+  box.classList.add('has-cmd');
+  /* Анимация появления команды */
+  box.classList.remove('cmd-appear');void box.offsetWidth;box.classList.add('cmd-appear');
 }
 
 function removeEnch(key){delete selectedEnch[key];renderEnchList();updateEnchOutput();}
-function clearEnch(){selectedEnch={};renderEnchList();updateEnchOutput();document.getElementById('ename-input').value='';document.getElementById('ench-count').value=1;}
+function clearEnch(){selectedEnch={};renderEnchList();updateEnchOutput();document.getElementById('ename-input').value='';document.getElementById('ench-count').value=1;const box=document.getElementById('ench-cmd-box');box.classList.remove('has-cmd','cmd-appear');}
 function copyEnch(){
   const t=document.getElementById('ench-cmd-box').textContent;
   if(!t||t.includes('Выбери'))return;
@@ -1070,6 +1214,17 @@ function copyEnch(){
     const b=document.getElementById('copybtn-ench');
     b.classList.add('flash');
     setTimeout(()=>b.classList.remove('flash'),1800);
+    /* Sparkle burst */
+    const rect=b.getBoundingClientRect();
+    ['✨','⚡','💫','🌟','✦'].forEach((s,i)=>{
+      const el=document.createElement('div');el.className='copy-burst';
+      el.textContent=s;
+      el.style.left=(rect.left+rect.width/2+((i-2)*22))+'px';
+      el.style.top=(rect.top-10)+'px';
+      el.style.animationDelay=(i*.06)+'s';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),900);
+    });
   });
 }
 
