@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MC Fill Commander · specter_xpath</title>
+<title>MC Commander · specter_xpath</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#060a0f;--bg2:#0b1018;--bg3:#0f1620;--bg4:#141d28;
   --border:#1a2a3a;--border2:#1f3347;
-  --green:#00ff88;--green2:#00cc6a;--green-dim:#002a18;
+  --green:#00ff88;--green-dim:#002a18;
   --blue:#38bdf8;--purple:#a78bfa;--red:#f87171;
   --orange:#fb923c;--yellow:#fbbf24;--pink:#f472b6;
   --text:#c9d8e8;--text2:#6b8599;--text3:#334d63;
@@ -18,177 +18,147 @@
   --font-ui:'Rajdhani',sans-serif;
   --font-code:'JetBrains Mono',monospace;
 }
+/* LIGHT THEME */
+body.light{
+  --bg:#f0f4f8;--bg2:#ffffff;--bg3:#e8eef5;--bg4:#dce6f0;
+  --border:#c5d5e8;--border2:#b0c8e0;
+  --green:#008844;--green-dim:#d0f0e4;
+  --blue:#0ea5e9;--purple:#7c3aed;--red:#dc2626;
+  --orange:#ea580c;--yellow:#ca8a04;--pink:#db2777;
+  --text:#1e3448;--text2:#4a6a85;--text3:#7a9ab5;
+  --font-mc:'Press Start 2P',monospace;
+  --font-ui:'Rajdhani',sans-serif;
+  --font-code:'JetBrains Mono',monospace;
+}
+body.light .grid-bg{background-image:linear-gradient(rgba(0,136,68,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,136,68,0.06) 1px,transparent 1px)}
+body.light .outbox,.light .enchcmd-box{background:#e8f4ee;color:var(--green)}
+body.light #particles{opacity:0.3}
+body.light .topnav{background:rgba(240,244,248,0.95);border-color:rgba(0,136,68,0.15)}
+body.light .card{box-shadow:0 2px 16px rgba(0,0,0,0.06)}
+body.light .toast{background:var(--green);color:#fff}
+
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size:16px;min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size:16px;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
 
-/* ANIMATED GRID */
+/* BG EFFECTS */
 .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:linear-gradient(rgba(0,255,136,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.025) 1px,transparent 1px);
-  background-size:48px 48px;
-  animation:gridDrift 20s linear infinite}
+  background-image:linear-gradient(rgba(0,255,136,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.022) 1px,transparent 1px);
+  background-size:48px 48px;animation:gridDrift 22s linear infinite}
 @keyframes gridDrift{0%{background-position:0 0}100%{background-position:48px 48px}}
-
-/* PARTICLES CANVAS */
 #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-/* AMBIENT GLOW */
 .ambient{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 60% 40% at 70% 15%,rgba(0,255,136,0.06) 0%,transparent 60%),
-             radial-gradient(ellipse 50% 35% at 15% 80%,rgba(56,189,248,0.05) 0%,transparent 55%),
-             radial-gradient(ellipse 40% 30% at 85% 70%,rgba(167,139,250,0.04) 0%,transparent 50%);
-  animation:ambientPulse 6s ease-in-out infinite alternate}
-@keyframes ambientPulse{0%{opacity:.6}100%{opacity:1}}
+  background:radial-gradient(ellipse 55% 35% at 75% 10%,rgba(0,255,136,0.055) 0%,transparent 60%),
+             radial-gradient(ellipse 45% 30% at 10% 85%,rgba(56,189,248,0.045) 0%,transparent 55%),
+             radial-gradient(ellipse 35% 25% at 90% 65%,rgba(167,139,250,0.035) 0%,transparent 50%);
+  animation:ambPulse 7s ease-in-out infinite alternate}
+@keyframes ambPulse{0%{opacity:.5}100%{opacity:1}}
 
-.wrap{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 16px 80px}
+/* ══ TOP NAV ══ */
+.topnav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(6,10,15,0.92);
+  border-bottom:1px solid rgba(0,255,136,0.1);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.topnav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;padding:0 16px;gap:0;height:56px;}
+.nav-logo{display:flex;align-items:center;gap:10px;margin-right:16px;flex-shrink:0;text-decoration:none;}
+.nav-logo svg{width:28px;height:28px}
+.nav-logo span{font-family:var(--font-mc);font-size:7px;color:var(--green);text-shadow:0 0 14px rgba(0,255,136,0.5);white-space:nowrap;line-height:1.5}
+.nav-tabs{display:flex;flex:1;gap:2px;height:100%;align-items:center;overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.ntab{display:flex;align-items:center;gap:6px;padding:0 12px;height:100%;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);cursor:pointer;border:none;background:none;font-family:var(--font-ui);transition:all .2s;position:relative;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;}
+.ntab:hover{color:var(--text2)}
+.ntab.active{color:var(--green);border-bottom-color:var(--green)}
+.ntab .ntab-icon{font-size:13px}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0}
 
-/* HEADER */
-.header{
-  padding:30px 0 26px;display:flex;align-items:center;gap:20px;
-  border-bottom:1px solid rgba(0,255,136,0.1);margin-bottom:28px;
-  animation:fadeDown .6s ease both}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+/* Theme toggle */
+.theme-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;width:36px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s;color:var(--text2)}
+.theme-btn:hover{border-color:var(--yellow);color:var(--yellow);transform:scale(1.1)}
 
-.logo-wrap{position:relative;width:52px;height:52px;flex-shrink:0}
-.logo-wrap svg{width:52px;height:52px}
-.logo-glow{position:absolute;inset:-6px;border-radius:12px;
-  background:radial-gradient(circle,rgba(0,255,136,0.2) 0%,transparent 70%);
-  animation:logoGlow 3s ease-in-out infinite alternate}
-@keyframes logoGlow{0%{opacity:.4}100%{opacity:1}}
-
-.header-text h1{font-family:var(--font-mc);font-size:11px;color:var(--green);line-height:1.8;
-  text-shadow:0 0 30px rgba(0,255,136,0.5),0 0 60px rgba(0,255,136,0.2);
-  animation:textFlicker 8s linear infinite}
-@keyframes textFlicker{0%,96%,98%,100%{opacity:1}97%,99%{opacity:.85}}
-.header-text p{font-size:13px;color:var(--text2);margin-top:6px;font-weight:500;letter-spacing:.06em}
-
-.version-pill{margin-left:auto;display:flex;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;overflow:hidden;flex-shrink:0}
-.vpill{padding:9px 16px;font-size:11px;font-weight:700;letter-spacing:.06em;cursor:pointer;color:var(--text2);transition:all .2s;border:none;background:none;font-family:var(--font-ui)}
+/* Version pill - expanded */
+.version-pill{display:flex;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;overflow:hidden}
+.vpill{padding:5px 9px;font-size:10px;font-weight:700;letter-spacing:.05em;cursor:pointer;color:var(--text2);transition:all .2s;border:none;background:none;font-family:var(--font-ui);white-space:nowrap}
 .vpill.am{color:#a78bfa;background:rgba(167,139,250,0.12)}
 .vpill.al{color:#fbbf24;background:rgba(251,191,36,0.1)}
+.vpill.ape{color:#fb923c;background:rgba(251,146,60,0.1)}
 
-/* SECTION LABEL */
-.sec-label{
-  font-size:10px;font-weight:700;letter-spacing:.2em;color:var(--text3);
-  text-transform:uppercase;margin:0 0 8px;
-  display:flex;align-items:center;gap:8px}
-.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ══ PAGES ══ */
+.page{display:none}
+.page.active{display:block;animation:fadeUp .4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:20px 16px 80px}
 
-/* CARD */
-.card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:14px;
-  padding:20px;margin-bottom:16px;position:relative;overflow:hidden;
-  transition:border-color .3s}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,255,136,0.25),transparent);
-  animation:scanLine 4s ease-in-out infinite}
-@keyframes scanLine{0%,100%{opacity:.3}50%{opacity:1}}
-.card:hover{border-color:rgba(0,255,136,0.12)}
+/* ══ CARD ══ */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s;animation:fadeUp .45s ease both}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,136,0.22),transparent)}
+.card:hover{border-color:rgba(0,255,136,0.12);box-shadow:0 4px 30px rgba(0,255,136,0.04)}
+.ctitle{font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.ctitle em{color:var(--green);opacity:.7;font-style:normal}
 
-.ctitle{font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--text3);
-  text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.ctitle em{color:var(--green);opacity:.7;font-style:normal;
-  text-shadow:0 0 10px rgba(0,255,136,0.5)}
-
-/* DIRECTION GRID */
+/* ══ DIR GRID ══ */
 .dir-wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.dbtn{
-  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
-  padding:8px 4px;cursor:pointer;transition:all .2s;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  color:var(--text2);font-family:var(--font-ui);font-size:10px;font-weight:700;
-  letter-spacing:.06em;user-select:none;min-height:62px;justify-content:center}
+.dbtn{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px 4px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text2);font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.06em;user-select:none;min-height:62px;justify-content:center}
 .dbtn:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,136,0.04);transform:translateY(-1px)}
-.dbtn.active{
-  background:rgba(0,255,136,0.07);border-color:var(--green);color:var(--green);
-  box-shadow:0 0 20px rgba(0,255,136,0.18),inset 0 0 14px rgba(0,255,136,0.06)}
+.dbtn.active{background:rgba(0,255,136,0.07);border-color:var(--green);color:var(--green);box-shadow:0 0 18px rgba(0,255,136,0.17),inset 0 0 12px rgba(0,255,136,0.05)}
 .dbtn.diag{border-style:dashed}
 .dbtn.diag.active{border-style:solid}
 .dbtn .di{font-size:18px;line-height:1}
 .dbtn .ax{font-size:9px;opacity:.45;font-weight:400}
-.dblank{background:var(--bg3);border:1px dashed #182535;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;min-height:62px}
+.dblank{background:var(--bg3);border:1px dashed #182535;border-radius:10px;display:flex;align-items:center;justify-content:center;min-height:62px}
 
-/* BLOCK GRID */
-.bgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
-.bbtn{
-  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
-  padding:10px 6px;cursor:pointer;transition:all .2s;
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  color:var(--text2);font-family:var(--font-ui);font-size:10px;font-weight:700;
-  letter-spacing:.04em;user-select:none;text-align:center;min-height:64px;justify-content:center}
-.bbtn:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);background:rgba(56,189,248,0.04)}
-.bbtn.active{border-color:var(--blue);color:var(--blue);background:rgba(56,189,248,0.09);
-  box-shadow:0 0 16px rgba(56,189,248,0.15)}
+/* ══ BLOCK GRID - scrollable on mobile ══ */
+.bgrid-wrap{overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.bgrid-wrap::-webkit-scrollbar{height:4px}
+.bgrid-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.bgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;min-width:360px}
+@media(max-width:500px){.bgrid{grid-template-columns:repeat(5,minmax(60px,1fr))}}
+.bbtn{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 6px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--text2);font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:.04em;user-select:none;text-align:center;min-height:64px;justify-content:center}
+.bbtn:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px)}
+.bbtn.active{border-color:var(--blue);color:var(--blue);background:rgba(56,189,248,0.08);box-shadow:0 0 14px rgba(56,189,248,0.14)}
 .bicon{font-size:22px;line-height:1}
 .crow{display:flex;gap:8px;align-items:center;margin-top:4px}
-.cinput{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
-  padding:9px 14px;color:var(--text);font-family:var(--font-code);font-size:13px;
-  flex:1;outline:none;transition:border-color .2s}
+.cinput{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 14px;color:var(--text);font-family:var(--font-code);font-size:13px;flex:1;outline:none;transition:border-color .2s}
 .cinput:focus{border-color:var(--purple)}
 .cinput::placeholder{color:var(--text3)}
 
-/* DIMS */
+/* ══ DIMS ══ */
 .dgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.dbox label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;
-  color:var(--text2);margin-bottom:6px;text-transform:uppercase}
-.dinput{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
-  padding:10px 14px;color:var(--text);font-family:var(--font-code);font-size:15px;
-  font-weight:600;width:100%;outline:none;transition:border-color .2s;-moz-appearance:textfield}
+.dbox label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text2);margin-bottom:6px;text-transform:uppercase}
+.dinput{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--font-code);font-size:15px;font-weight:600;width:100%;outline:none;transition:border-color .2s;-moz-appearance:textfield}
 .dinput::-webkit-inner-spin-button,.dinput::-webkit-outer-spin-button{-webkit-appearance:none}
 .dinput:focus{border-color:var(--green)}
 .dhint{font-size:11px;color:var(--text3);margin-top:4px;font-weight:500}
 
-/* OUTPUT */
-.outbox{
-  background:#030608;border:1px solid var(--border);border-radius:10px;
-  padding:18px 48px 18px 20px;font-family:var(--font-code);font-size:16px;
-  color:var(--green);min-height:68px;word-break:break-all;line-height:1.6;
-  position:relative;white-space:pre-wrap;margin-bottom:12px;
-  text-shadow:0 0 14px rgba(0,255,136,0.35);
-  transition:box-shadow .3s}
-.outbox.multi{font-size:13px;min-height:110px}
-.outbox:hover{box-shadow:0 0 20px rgba(0,255,136,0.08)}
-.olabel{position:absolute;top:10px;right:14px;font-size:9px;font-family:var(--font-ui);
-  font-weight:700;letter-spacing:.15em;color:var(--text3);text-transform:uppercase}
+/* ══ OUTPUT BOX ══ */
+.outbox{background:#030608;border:1px solid var(--border);border-radius:10px;padding:18px 20px;font-family:var(--font-code);font-size:15px;color:var(--green);min-height:64px;word-break:break-all;line-height:1.7;position:relative;white-space:pre-wrap;margin-bottom:12px;text-shadow:0 0 14px rgba(0,255,136,0.3);transition:box-shadow .3s}
+.outbox.multi{font-size:12px;min-height:100px}
+.outbox:hover{box-shadow:0 0 22px rgba(0,255,136,0.07)}
+.olabel{position:absolute;top:9px;right:13px;font-size:9px;font-family:var(--font-ui);font-weight:700;letter-spacing:.15em;color:var(--text3);text-transform:uppercase}
 
-/* CURSOR BLINK */
-.outbox::after{content:'▋';animation:blink 1.2s step-end infinite;color:var(--green);opacity:.7}
-@keyframes blink{0%,100%{opacity:.7}50%{opacity:0}}
+/* ══ PREVIEW CELLS ══ */
+.prow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.pcell{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px}
+.pcell .pl{font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.pcell .pv{font-family:var(--font-code);font-size:12px;color:var(--purple);font-weight:600}
 
-/* PREVIEW CELLS */
-.prow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:16px}
-.pcell{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;transition:border-color .2s}
-.pcell:hover{border-color:var(--border2)}
-.pcell .pl{font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
-.pcell .pv{font-family:var(--font-code);font-size:13px;color:var(--purple);font-weight:600}
+/* ══ BUTTONS ══ */
+.copybtn{background:var(--green-dim);border:1px solid var(--green);color:var(--green);border-radius:8px;padding:11px 22px;font-size:13px;font-weight:700;font-family:var(--font-ui);letter-spacing:.1em;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:8px;text-transform:uppercase;position:relative;overflow:hidden}
+.copybtn::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(0,255,136,0.3) 0%,transparent 70%);opacity:0;transition:opacity .3s}
+.copybtn:hover{background:rgba(0,255,136,0.13);box-shadow:0 0 22px rgba(0,255,136,0.22);transform:translateY(-1px)}
+.copybtn:active::after{opacity:1}
+.copybtn.flash{background:var(--green);color:#030608;box-shadow:0 0 32px rgba(0,255,136,0.55)}
 
-/* COPY BTN */
-.copybtn{
-  background:var(--green-dim);border:1px solid var(--green);color:var(--green);
-  border-radius:8px;padding:12px 28px;font-size:13px;font-weight:700;
-  font-family:var(--font-ui);letter-spacing:.1em;cursor:pointer;
-  transition:all .18s;display:flex;align-items:center;gap:8px;text-transform:uppercase}
-.copybtn:hover{background:rgba(0,255,136,0.14);box-shadow:0 0 24px rgba(0,255,136,0.25);transform:translateY(-1px)}
-.copybtn.flash{background:var(--green);color:#030608;box-shadow:0 0 36px rgba(0,255,136,0.6)}
-
-/* WARN / INFO */
-.warn{background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.2);
-  border-radius:8px;padding:10px 14px;color:#fde68a;font-size:12px;
-  display:flex;align-items:flex-start;gap:8px;margin-top:12px}
+/* ══ WARN ══ */
+.warn{background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:10px 14px;color:#fde68a;font-size:12px;display:flex;align-items:flex-start;gap:8px;margin-top:12px}
 .warn.h{display:none}
-.stinfo{background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.18);
-  border-radius:8px;padding:10px 14px;color:#c4b5fd;font-size:12px;margin-top:12px;display:none}
+.stinfo{background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.18);border-radius:8px;padding:10px 14px;color:#c4b5fd;font-size:12px;margin-top:12px;display:none}
 .stinfo.show{display:flex;align-items:flex-start;gap:8px}
 
-/* ══════════════════════════════════════
-   QUICK COMMANDS SECTION
-══════════════════════════════════════ */
-.qc-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.qtab{
-  background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
-  padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;
-  cursor:pointer;color:var(--text2);transition:all .18s;font-family:var(--font-ui);
-  text-transform:uppercase;user-select:none}
+/* ══ QUICK COMMANDS ══ */
+.qc-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.qc-tabs::-webkit-scrollbar{display:none}
+.qtab{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;letter-spacing:.07em;cursor:pointer;color:var(--text2);transition:all .18s;font-family:var(--font-ui);text-transform:uppercase;user-select:none;white-space:nowrap;flex-shrink:0}
 .qtab:hover{color:var(--text)}
 .qtab.active{color:#000;border-color:transparent}
 .qtab[data-tab="effects"].active{background:var(--purple);box-shadow:0 0 14px rgba(167,139,250,0.35)}
@@ -197,83 +167,153 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 .qtab[data-tab="weather"].active{background:var(--blue);box-shadow:0 0 14px rgba(56,189,248,0.35)}
 .qtab[data-tab="fun"].active{background:var(--orange);box-shadow:0 0 14px rgba(251,146,60,0.35)}
 .qtab[data-tab="game"].active{background:var(--green);box-shadow:0 0 14px rgba(0,255,136,0.35)}
-
-.qpanel{display:none}
-.qpanel.show{display:block}
-
+.qtab[data-tab="cmdblock"].active{background:linear-gradient(135deg,#7c3aed,#2563eb);box-shadow:0 0 14px rgba(124,58,237,0.4)}
+.qpanel{display:none}.qpanel.show{display:block}
 .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.qcard{
-  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
-  padding:12px 14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+@media(max-width:480px){.qgrid{grid-template-columns:1fr}}
+.qcard{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .qcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
-.qcard.purple::before{background:var(--purple)}
-.qcard.red::before{background:var(--red)}
-.qcard.yellow::before{background:var(--yellow)}
-.qcard.blue::before{background:var(--blue)}
-.qcard.orange::before{background:var(--orange)}
-.qcard.green::before{background:var(--green)}
-.qcard.pink::before{background:var(--pink)}
-.qcard:hover{transform:translateY(-2px);border-color:var(--border2)}
+.qcard.purple::before{background:var(--purple)}.qcard.red::before{background:var(--red)}
+.qcard.yellow::before{background:var(--yellow)}.qcard.blue::before{background:var(--blue)}
+.qcard.orange::before{background:var(--orange)}.qcard.green::before{background:var(--green)}
+.qcard.pink::before{background:var(--pink)}.qcard.indigo::before{background:#7c3aed}
+.qcard:hover{transform:translateY(-2px);border-color:var(--border2);box-shadow:0 6px 20px rgba(0,0,0,0.2)}
 .qcard:hover .qcmd{color:var(--green)}
-.qcard .qname{font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;letter-spacing:.04em}
-.qcard .qdesc{font-size:11px;color:var(--text3);margin-bottom:7px;line-height:1.5}
-.qcard .qcmd{font-family:var(--font-code);font-size:11px;color:var(--text2);
-  background:rgba(0,0,0,0.3);border-radius:5px;padding:5px 8px;
-  word-break:break-all;transition:color .2s}
-.qcard .qcopy-hint{
-  position:absolute;top:8px;right:10px;
-  font-size:9px;font-weight:700;letter-spacing:.1em;
-  color:var(--text3);text-transform:uppercase;opacity:0;transition:opacity .2s}
-.qcard:hover .qcopy-hint{opacity:1}
+.qcard .qname{font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:.04em}
+.qcard .qdesc{font-size:11px;color:var(--text3);margin-bottom:7px;line-height:1.4}
+.qcard .qcmd{font-family:var(--font-code);font-size:11px;color:var(--text2);background:rgba(0,0,0,0.3);border-radius:5px;padding:5px 8px;word-break:break-all;transition:color .2s}
+.qcard .copy-hint{position:absolute;top:8px;right:10px;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;opacity:0;transition:opacity .2s}
+.qcard:hover .copy-hint{opacity:1}
 
-/* COPY TOAST */
-.toast{
-  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:var(--green);color:#030608;
-  padding:10px 24px;border-radius:50px;font-size:13px;font-weight:700;
-  font-family:var(--font-ui);letter-spacing:.08em;
-  opacity:0;transition:all .3s;z-index:999;pointer-events:none;
-  box-shadow:0 4px 24px rgba(0,255,136,0.4)}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* CMD BLOCK special card */
+.cmdblock-get{background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(37,99,235,0.08));border:1px solid rgba(124,58,237,0.3);border-radius:12px;padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.cmdblock-icon{font-size:40px;filter:drop-shadow(0 0 12px rgba(124,58,237,0.6));animation:cmdGlow 2s ease-in-out infinite alternate}
+@keyframes cmdGlow{0%{filter:drop-shadow(0 0 8px rgba(124,58,237,0.4))}100%{filter:drop-shadow(0 0 18px rgba(124,58,237,0.8))}}
+.cmdblock-info{flex:1;min-width:180px}
+.cmdblock-title{font-size:14px;font-weight:700;color:#c4b5fd;margin-bottom:4px}
+.cmdblock-desc{font-size:12px;color:var(--text3);margin-bottom:10px}
+.cmdblock-cmd{font-family:var(--font-code);font-size:12px;color:#a78bfa;background:rgba(0,0,0,0.3);border-radius:6px;padding:7px 10px;margin-bottom:10px;word-break:break-all}
+.get-btn{background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(37,99,235,0.2));border:1px solid rgba(124,58,237,0.4);color:#c4b5fd;border-radius:8px;padding:9px 18px;font-size:12px;font-weight:700;font-family:var(--font-ui);letter-spacing:.08em;cursor:pointer;transition:all .2s;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px}
+.get-btn:hover{background:linear-gradient(135deg,rgba(124,58,237,0.35),rgba(37,99,235,0.35));transform:translateY(-1px);box-shadow:0 0 20px rgba(124,58,237,0.3)}
 
-/* FOOTER */
-.footer{
-  border-top:1px solid rgba(0,255,136,0.08);
-  padding:32px 0 16px;
-  display:flex;flex-direction:column;align-items:center;gap:16px}
-.ig-link{
-  display:flex;align-items:center;gap:12px;
-  background:linear-gradient(135deg,rgba(131,58,180,0.15),rgba(253,29,29,0.1),rgba(252,176,69,0.1));
-  border:1px solid rgba(167,139,250,0.2);
-  border-radius:14px;padding:14px 24px;
-  text-decoration:none;transition:all .25s;
-  position:relative;overflow:hidden}
-.ig-link::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(131,58,180,0.08),rgba(253,29,29,0.06),rgba(252,176,69,0.06));
-  opacity:0;transition:opacity .3s}
-.ig-link:hover::before{opacity:1}
-.ig-link:hover{border-color:rgba(167,139,250,0.4);transform:translateY(-2px);
-  box-shadow:0 8px 30px rgba(131,58,180,0.2)}
+/* ══════════════════════════════════
+   ENCHANTMENT GENERATOR
+══════════════════════════════════ */
+.ench-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start}
+@media(max-width:640px){.ench-layout{grid-template-columns:1fr}}
+.item-sidebar{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;position:sticky;top:76px;max-height:calc(100vh - 100px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.item-sidebar::-webkit-scrollbar{width:4px}
+.item-sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.item-sidebar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,136,0.22),transparent)}
+.ib-title{font-size:10px;font-weight:700;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+.ib-cat{margin-bottom:14px}
+.ib-cat-label{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:8px;padding-left:2px;display:flex;align-items:center;gap:6px}
+.ib-cat-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.ib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.ibtn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 4px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--font-ui);font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--text2);user-select:none;text-align:center;min-height:54px;justify-content:center}
+.ibtn .ii{font-size:18px;line-height:1}
+.ibtn:hover{border-color:var(--yellow);color:var(--yellow);background:rgba(251,191,36,0.05);transform:translateY(-1px)}
+.ibtn.active{border-color:var(--yellow);color:var(--yellow);background:rgba(251,191,36,0.09);box-shadow:0 0 14px rgba(251,191,36,0.18)}
+
+/* Enchantment panel */
+.ench-panel{display:flex;flex-direction:column;gap:12px}
+.ench-selected-item{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;flex-wrap:wrap}
+.ench-selected-item::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(251,191,36,0.3),transparent)}
+.esi-icon{font-size:36px;line-height:1;filter:drop-shadow(0 0 10px rgba(251,191,36,0.4))}
+.esi-info{flex:1;min-width:100px}
+.esi-name{font-size:16px;font-weight:700;color:var(--yellow);letter-spacing:.04em;margin-bottom:2px}
+.esi-sub{font-size:11px;color:var(--text3)}
+
+/* Scrollable ench list on mobile */
+.ench-list-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden}
+.ench-list-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(167,139,250,0.25),transparent)}
+.ench-list-scroll{max-height:380px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.ench-list-scroll::-webkit-scrollbar{width:4px}
+.ench-list-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.ench-list{display:flex;flex-direction:column;gap:8px;padding-right:4px}
+.ench-row{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+.ench-row:hover{border-color:var(--border2)}
+.ench-row.checked{border-color:rgba(167,139,250,0.4);background:rgba(167,139,250,0.04)}
+.er-check{width:18px;height:18px;border-radius:5px;border:2px solid var(--border2);background:var(--bg);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;position:relative}
+.er-check.on{border-color:var(--purple);background:var(--purple)}
+.er-check.on::after{content:'✓';color:#fff;font-size:11px;font-weight:700;position:absolute}
+.er-info{flex:1;min-width:0}
+.er-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.er-desc{font-size:11px;color:var(--text3)}
+.er-lvl{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.lvl-btn{background:var(--bg);border:1px solid var(--border2);border-radius:5px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);font-size:13px;font-weight:700;transition:all .15s;font-family:var(--font-ui)}
+.lvl-btn:hover{border-color:var(--purple);color:var(--purple)}
+.lvl-num{font-family:var(--font-code);font-size:14px;font-weight:600;color:var(--purple);min-width:24px;text-align:center}
+.lvl-max{font-size:10px;color:var(--text3);min-width:32px;text-align:left}
+.er-conflict{font-size:9px;color:var(--red);font-weight:700;letter-spacing:.05em}
+
+.ench-out-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden}
+.ench-out-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,136,0.22),transparent)}
+.ename-row{display:flex;gap:10px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
+.ename-input{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 14px;color:var(--yellow);font-family:var(--font-code);font-size:13px;flex:1;outline:none;transition:border-color .2s;min-width:140px}
+.ename-input:focus{border-color:var(--yellow)}
+.ename-input::placeholder{color:var(--text3)}
+.ecount-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--text2);white-space:nowrap}
+.ecount-input{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;color:var(--text);font-family:var(--font-code);font-size:14px;font-weight:600;width:72px;outline:none;transition:border-color .2s;-moz-appearance:textfield}
+.ecount-input::-webkit-inner-spin-button,.ecount-input::-webkit-outer-spin-button{-webkit-appearance:none}
+.ecount-input:focus{border-color:var(--green)}
+.enchcmd-box{background:#030608;border:1px solid var(--border);border-radius:10px;padding:16px 18px;font-family:var(--font-code);font-size:13px;color:var(--green);min-height:60px;word-break:break-all;line-height:1.7;white-space:pre-wrap;text-shadow:0 0 10px rgba(0,255,136,0.25);margin-bottom:12px}
+.no-ench-msg{color:var(--text3);font-style:italic;font-size:13px}
+.ench-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.etag{background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;color:#c4b5fd;display:flex;align-items:center;gap:6px}
+.etag-x{cursor:pointer;opacity:.6;transition:opacity .2s;font-size:12px}
+.etag-x:hover{opacity:1}
+
+/* ══ TOAST (EPIC) ══ */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px) scale(0.9);
+  background:linear-gradient(135deg,var(--green),#00cc66);color:#030608;padding:12px 28px;border-radius:50px;
+  font-size:13px;font-weight:700;font-family:var(--font-ui);letter-spacing:.1em;
+  opacity:0;transition:all .35s cubic-bezier(0.175,0.885,0.32,1.275);z-index:9999;pointer-events:none;
+  box-shadow:0 4px 32px rgba(0,255,136,0.5);white-space:nowrap;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+.toast-icon{font-size:16px;animation:toastPop .4s ease}
+@keyframes toastPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+/* ══ RIPPLE ══ */
+.ripple{position:absolute;border-radius:50%;background:rgba(0,255,136,0.3);pointer-events:none;transform:scale(0);animation:rippleAnim .6s linear;z-index:10}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+
+/* ══ FOOTER ══ */
+.footer{border-top:1px solid rgba(0,255,136,0.08);padding:32px 0 16px;display:flex;flex-direction:column;align-items:center;gap:16px;position:relative;z-index:1}
+.ig-link{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(131,58,180,0.12),rgba(253,29,29,0.08),rgba(252,176,69,0.08));border:1px solid rgba(167,139,250,0.18);border-radius:14px;padding:14px 24px;text-decoration:none;transition:all .25s;position:relative;overflow:hidden}
+.ig-link:hover{border-color:rgba(167,139,250,0.4);transform:translateY(-2px);box-shadow:0 8px 30px rgba(131,58,180,0.18)}
 .ig-icon{width:36px;height:36px;flex-shrink:0}
 .ig-info{display:flex;flex-direction:column;gap:2px}
 .ig-handle{font-size:16px;font-weight:700;color:var(--text);letter-spacing:.03em}
 .ig-sub{font-size:11px;color:var(--text2);letter-spacing:.06em}
 .footer-copy{font-size:11px;color:var(--text3);letter-spacing:.05em;text-align:center}
 
-/* SCROLLBAR */
+/* ══ RESPONSIVE ══ */
+@media(max-width:600px){
+  .nav-logo span{display:none}
+  .ntab{padding:0 8px;font-size:10px}
+  .prow{grid-template-columns:1fr 1fr}
+  .dgrid{grid-template-columns:1fr 1fr 1fr}
+  .version-pill{display:none}
+  .version-pill-mobile{display:flex!important}
+  .dir-wrap{grid-template-columns:repeat(5,1fr);gap:5px}
+  .dbtn{min-height:52px;font-size:9px;padding:6px 2px}
+  .dbtn .di{font-size:15px}
+}
+.version-pill-mobile{display:none;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;overflow:hidden;width:100%;margin-bottom:12px}
+.version-pill-mobile .vpill{flex:1;text-align:center;padding:8px}
+
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
-/* FADE IN CARDS */
-.card{animation:fadeUp .5s ease both}
-.card:nth-child(1){animation-delay:.05s}
-.card:nth-child(2){animation-delay:.1s}
-.card:nth-child(3){animation-delay:.15s}
-.card:nth-child(4){animation-delay:.2s}
-.card:nth-child(5){animation-delay:.25s}
-.card:nth-child(6){animation-delay:.3s}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* ══ PULSE ANIMATION ON ACTIVE NAV ══ */
+@keyframes navPulse{0%,100%{text-shadow:0 0 8px rgba(0,255,136,0.4)}50%{text-shadow:0 0 20px rgba(0,255,136,0.8)}}
+.ntab.active{animation:navPulse 3s ease-in-out infinite}
+
+/* Hero header */
+.page-hero{text-align:center;padding:24px 0 8px;margin-bottom:8px}
+.page-hero h1{font-family:var(--font-mc);font-size:10px;color:var(--green);text-shadow:0 0 20px rgba(0,255,136,0.5);letter-spacing:.1em;line-height:2}
+.page-hero p{font-size:13px;color:var(--text3);margin-top:8px}
 </style>
 </head>
 <body>
@@ -282,489 +322,467 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 <div class="ambient"></div>
 <canvas id="particles"></canvas>
 
+<!-- ══ TOP NAV ══ -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="nav-logo" href="#" onclick="switchPage('fill');playClick();return false">
+      <svg viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="5" fill="#0b1018" stroke="#1a2a3a" stroke-width="1"/><rect x="6" y="6" width="7" height="7" fill="#00ff88" opacity=".9" rx="1"/><rect x="15" y="6" width="7" height="7" fill="#00ff88" opacity=".4" rx="1"/><rect x="6" y="15" width="7" height="7" fill="#00ff88" opacity=".4" rx="1"/><rect x="15" y="15" width="7" height="7" fill="#00ff88" opacity=".15" rx="1"/></svg>
+      <span>MC COMMANDER</span>
+    </a>
+    <div class="nav-tabs">
+      <button class="ntab active" id="ntab-fill" onclick="switchPage('fill');playClick()"><span class="ntab-icon">⛏</span>Fill &amp; Tunnel</button>
+      <button class="ntab" id="ntab-quick" onclick="switchPage('quick');playClick()"><span class="ntab-icon">⚡</span>Quick Commands</button>
+      <button class="ntab" id="ntab-ench" onclick="switchPage('ench');playClick()"><span class="ntab-icon">✦</span>Enchantments</button>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" id="theme-toggle" onclick="toggleTheme();playClick()" title="Тёмная / Светлая тема">🌙</button>
+      <div class="version-pill">
+        <button class="vpill am" id="btn-modern" onclick="setVersion('modern');playClick()">1.18+</button>
+        <button class="vpill" id="btn-legacy" onclick="setVersion('legacy');playClick()">Legacy</button>
+        <button class="vpill" id="btn-pe" onclick="setVersion('pe');playClick()">PE/BE</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
 <div class="wrap">
 
-<!-- HEADER -->
-<div class="header">
-  <div class="logo-wrap">
-    <div class="logo-glow"></div>
-    <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="4" width="44" height="44" rx="8" fill="#0b1018" stroke="#1a2a3a" stroke-width="1.5"/>
-      <rect x="10" y="10" width="14" height="14" fill="#00ff88" opacity=".9" rx="1"/>
-      <rect x="28" y="10" width="14" height="14" fill="#00ff88" opacity=".45" rx="1"/>
-      <rect x="10" y="28" width="14" height="14" fill="#00ff88" opacity=".45" rx="1"/>
-      <rect x="28" y="28" width="14" height="14" fill="#00ff88" opacity=".15" rx="1"/>
-      <rect x="15" y="15" width="4" height="4" fill="#00ff88" rx="0.5"/>
-      <rect x="33" y="15" width="4" height="4" fill="#00ff88" opacity=".35" rx="0.5"/>
-    </svg>
-  </div>
-  <div class="header-text">
-    <h1>MC FILL COMMANDER</h1>
-    <p>Tunnel · Fill · Quick Commands · specter_xpath</p>
-  </div>
-  <div class="version-pill">
-    <button class="vpill am" id="btn-modern" onclick="setVersion('modern')">1.18.1+</button>
-    <button class="vpill" id="btn-legacy" onclick="setVersion('legacy')">LEGACY</button>
-  </div>
+<!-- Mobile version select -->
+<div class="version-pill-mobile">
+  <button class="vpill am" id="btn-modern-m" onclick="setVersion('modern');playClick()">1.18+</button>
+  <button class="vpill" id="btn-legacy-m" onclick="setVersion('legacy');playClick()">Legacy</button>
+  <button class="vpill" id="btn-pe-m" onclick="setVersion('pe');playClick()">PE/BE</button>
 </div>
 
-<!-- ═══ DIRECTION ═══ -->
-<div class="card">
-  <div class="ctitle"><em>◈</em> Direction &amp; Mode</div>
-  <div class="dir-wrap">
-    <button class="dbtn diag" id="dir-nw" onclick="setDir('nw')"><span class="di">↖</span><span>NW</span><span class="ax">-X -Z</span></button>
-    <button class="dbtn active" id="dir-north" onclick="setDir('north')"><span class="di">▲</span><span>NORTH</span><span class="ax">-Z</span></button>
-    <button class="dbtn diag" id="dir-ne" onclick="setDir('ne')"><span class="di">↗</span><span>NE</span><span class="ax">+X -Z</span></button>
-    <button class="dbtn" id="dir-up" onclick="setDir('up')"><span class="di">⬆</span><span>UP</span><span class="ax">+Y</span></button>
-    <button class="dbtn diag" id="dir-up-north" onclick="setDir('up-north')"><span class="di">↗</span><span>UP-N</span><span class="ax">+Y-Z</span></button>
-    <button class="dbtn" id="dir-west" onclick="setDir('west')"><span class="di">◀</span><span>WEST</span><span class="ax">-X</span></button>
-    <div class="dblank"><span style="font-size:9px;color:var(--text3);letter-spacing:.1em;font-weight:700">PLAYER</span></div>
-    <button class="dbtn" id="dir-east" onclick="setDir('east')"><span class="di">▶</span><span>EAST</span><span class="ax">+X</span></button>
-    <button class="dbtn" id="dir-down" onclick="setDir('down')"><span class="di">⬇</span><span>DOWN</span><span class="ax">-Y</span></button>
-    <button class="dbtn diag" id="dir-down-south" onclick="setDir('down-south')"><span class="di">↘</span><span>DN-S</span><span class="ax">-Y+Z</span></button>
-    <button class="dbtn diag" id="dir-sw" onclick="setDir('sw')"><span class="di">↙</span><span>SW</span><span class="ax">-X +Z</span></button>
-    <button class="dbtn" id="dir-south" onclick="setDir('south')"><span class="di">▼</span><span>SOUTH</span><span class="ax">+Z</span></button>
-    <button class="dbtn diag" id="dir-se" onclick="setDir('se')"><span class="di">↘</span><span>SE</span><span class="ax">+X +Z</span></button>
-    <div class="dblank"></div>
-    <button class="dbtn diag" id="dir-down-north" onclick="setDir('down-north')"><span class="di">↙</span><span>DN-N</span><span class="ax">-Y-Z</span></button>
-  </div>
-  <div class="stinfo" id="stinfo"><span style="flex-shrink:0">⚙</span><span>Staircase: generates one command per step. Run them in order.</span></div>
-  <div class="warn h" id="mwarn"><span style="flex-shrink:0">⚠</span><span>Modern 1.18.1+: world height <strong>Y -64</strong> to Y 320. Lava below Y 10!</span></div>
-</div>
+<!-- ══════════════ PAGE: FILL ══════════════ -->
+<div class="page active" id="page-fill">
 
-<!-- ═══ BLOCK ═══ -->
-<div class="card">
-  <div class="ctitle"><em>◈</em> Fill Block</div>
-  <div class="bgrid">
-    <button class="bbtn active" onclick="selectBlock(this,'air')"><span class="bicon">🌫️</span><span>Air</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'tnt')"><span class="bicon">💣</span><span>TNT</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'water')"><span class="bicon">🌊</span><span>Water</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'lava')"><span class="bicon">🔥</span><span>Lava</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'glass')"><span class="bicon">🪟</span><span>Glass</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'diamond_block')"><span class="bicon">💎</span><span>Diamond</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'obsidian')"><span class="bicon">🌑</span><span>Obsidian</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'sand')"><span class="bicon">🏖️</span><span>Sand</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'barrier')"><span class="bicon">🚫</span><span>Barrier</span></button>
-    <button class="bbtn" onclick="selectBlock(this,'glowstone')"><span class="bicon">✨</span><span>Glow</span></button>
-  </div>
-  <div class="crow">
-    <span style="font-size:12px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Custom:</span>
-    <input class="cinput" id="custom-block" placeholder="e.g. stone_bricks, red_wool, ice..." oninput="onCustom(this)">
-  </div>
-</div>
-
-<!-- ═══ DIMS ═══ -->
-<div class="card">
-  <div class="ctitle"><em>◈</em> Dimensions</div>
-  <div class="dgrid">
-    <div class="dbox"><label id="lbl-l">LENGTH</label><input class="dinput" type="number" id="inp-l" value="10" min="1" oninput="generate()"><div class="dhint" id="hint-l">blocks forward</div></div>
-    <div class="dbox"><label id="lbl-w">WIDTH</label><input class="dinput" type="number" id="inp-w" value="3" min="1" oninput="generate()"><div class="dhint">centered on player</div></div>
-    <div class="dbox"><label id="lbl-h">HEIGHT</label><input class="dinput" type="number" id="inp-h" value="3" min="1" oninput="generate()"><div class="dhint" id="hint-h">from feet level</div></div>
-  </div>
-</div>
-
-<!-- ═══ OUTPUT ═══ -->
-<div class="card">
-  <div class="ctitle"><em>◈</em> Generated Command</div>
-  <div class="prow">
-    <div class="pcell"><div class="pl">From</div><div class="pv" id="pv-from">~ ~ ~</div></div>
-    <div class="pcell"><div class="pl">To</div><div class="pv" id="pv-to">~ ~ ~</div></div>
-    <div class="pcell"><div class="pl">Volume</div><div class="pv" id="pv-size">—</div></div>
-    <div class="pcell"><div class="pl">Block</div><div class="pv" id="pv-block" style="color:var(--yellow)">air</div></div>
-  </div>
-  <div class="outbox" id="cmd-out"><span class="olabel">COMMAND</span>/fill ~ ~ ~ ~ ~ ~ air</div>
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-    <div style="font-size:12px;color:var(--text3);font-weight:500">Stand at start → T → paste → Enter</div>
-    <button class="copybtn" id="copybtn" onclick="copyFill()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-      Copy Command
-    </button>
-  </div>
-</div>
-
-<!-- ═══ QUICK COMMANDS ═══ -->
-<div class="sec-label" style="margin-top:8px">Quick Commands</div>
-<div class="card" style="animation-delay:.32s">
-  <div class="ctitle"><em>⚡</em> Ready-to-Use Commands</div>
-  <div class="qc-tabs">
-    <button class="qtab active" data-tab="effects" onclick="switchTab('effects')">✦ Effects</button>
-    <button class="qtab" data-tab="health" onclick="switchTab('health')">❤ Health</button>
-    <button class="qtab" data-tab="time" onclick="switchTab('time')">☀ Time</button>
-    <button class="qtab" data-tab="weather" onclick="switchTab('weather')">☁ Weather</button>
-    <button class="qtab" data-tab="fun" onclick="switchTab('fun')">★ Fun</button>
-    <button class="qtab" data-tab="game" onclick="switchTab('game')">⚙ Game</button>
+  <div class="card">
+    <div class="ctitle"><em>◈</em> Direction &amp; Mode</div>
+    <div class="dir-wrap">
+      <button class="dbtn diag" id="dir-nw" onclick="setDir('nw');playClick()"><span class="di">↖</span><span>NW</span><span class="ax">-X -Z</span></button>
+      <button class="dbtn active" id="dir-north" onclick="setDir('north');playClick()"><span class="di">▲</span><span>NORTH</span><span class="ax">-Z</span></button>
+      <button class="dbtn diag" id="dir-ne" onclick="setDir('ne');playClick()"><span class="di">↗</span><span>NE</span><span class="ax">+X -Z</span></button>
+      <button class="dbtn" id="dir-up" onclick="setDir('up');playClick()"><span class="di">⬆</span><span>UP</span><span class="ax">+Y</span></button>
+      <button class="dbtn diag" id="dir-up-north" onclick="setDir('up-north');playClick()"><span class="di">↗</span><span>UP-N</span><span class="ax">+Y-Z</span></button>
+      <button class="dbtn" id="dir-west" onclick="setDir('west');playClick()"><span class="di">◀</span><span>WEST</span><span class="ax">-X</span></button>
+      <div class="dblank"><span style="font-size:9px;color:var(--text3);letter-spacing:.1em;font-weight:700">PLAYER</span></div>
+      <button class="dbtn" id="dir-east" onclick="setDir('east');playClick()"><span class="di">▶</span><span>EAST</span><span class="ax">+X</span></button>
+      <button class="dbtn" id="dir-down" onclick="setDir('down');playClick()"><span class="di">⬇</span><span>DOWN</span><span class="ax">-Y</span></button>
+      <button class="dbtn diag" id="dir-down-south" onclick="setDir('down-south');playClick()"><span class="di">↘</span><span>DN-S</span><span class="ax">-Y+Z</span></button>
+      <button class="dbtn diag" id="dir-sw" onclick="setDir('sw');playClick()"><span class="di">↙</span><span>SW</span><span class="ax">-X +Z</span></button>
+      <button class="dbtn" id="dir-south" onclick="setDir('south');playClick()"><span class="di">▼</span><span>SOUTH</span><span class="ax">+Z</span></button>
+      <button class="dbtn diag" id="dir-se" onclick="setDir('se');playClick()"><span class="di">↘</span><span>SE</span><span class="ax">+X +Z</span></button>
+      <div class="dblank"></div>
+      <button class="dbtn diag" id="dir-down-north" onclick="setDir('down-north');playClick()"><span class="di">↙</span><span>DN-N</span><span class="ax">-Y-Z</span></button>
+    </div>
+    <div class="stinfo" id="stinfo"><span style="flex-shrink:0">⚙</span><span>Staircase: generates one command per step. Run them in order.</span></div>
+    <div class="warn h" id="mwarn"><span style="flex-shrink:0">⚠</span><span id="mwarn-text">Modern 1.18.1+: world height <strong>Y -64</strong> to Y 320. Лава ниже Y 10!</span></div>
   </div>
 
-  <!-- EFFECTS -->
-  <div class="qpanel show" id="panel-effects">
-    <div class="qgrid">
-      <div class="qcard purple" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Speed II · 10 мин</div>
-        <div class="qdesc">Максимальная скорость движения</div>
-        <div class="qcmd">/effect give @s speed 600 1</div>
+  <div class="card">
+    <div class="ctitle"><em>◈</em> Fill Block</div>
+    <div class="bgrid-wrap">
+      <div class="bgrid">
+        <button class="bbtn active" onclick="selectBlock(this,'air');playClick()"><span class="bicon">🌫️</span><span>Air</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'tnt');playClick()"><span class="bicon">💣</span><span>TNT</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'water');playClick()"><span class="bicon">🌊</span><span>Water</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'lava');playClick()"><span class="bicon">🔥</span><span>Lava</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'glass');playClick()"><span class="bicon">🪟</span><span>Glass</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'diamond_block');playClick()"><span class="bicon">💎</span><span>Diamond</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'obsidian');playClick()"><span class="bicon">🌑</span><span>Obsidian</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'sand');playClick()"><span class="bicon">🏖️</span><span>Sand</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'barrier');playClick()"><span class="bicon">🚫</span><span>Barrier</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'glowstone');playClick()"><span class="bicon">✨</span><span>Glow</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'stone');playClick()"><span class="bicon">🪨</span><span>Stone</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'grass_block');playClick()"><span class="bicon">🌿</span><span>Grass</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'dirt');playClick()"><span class="bicon">🟫</span><span>Dirt</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'bedrock');playClick()"><span class="bicon">⬛</span><span>Bedrock</span></button>
+        <button class="bbtn" onclick="selectBlock(this,'netherrack');playClick()"><span class="bicon">🔴</span><span>Nether</span></button>
       </div>
-      <div class="qcard purple" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Night Vision</div>
-        <div class="qdesc">Видеть в темноте навсегда</div>
-        <div class="qcmd">/effect give @s night_vision 9999 0</div>
-      </div>
-      <div class="qcard purple" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Strength V</div>
-        <div class="qdesc">Огромный урон в рукопашную</div>
-        <div class="qcmd">/effect give @s strength 600 4</div>
-      </div>
-      <div class="qcard purple" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Jump Boost V</div>
-        <div class="qdesc">Прыгать как ракета</div>
-        <div class="qcmd">/effect give @s jump_boost 300 4</div>
-      </div>
-      <div class="qcard purple" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Haste II</div>
-        <div class="qdesc">Быстрее копать и ломать</div>
-        <div class="qcmd">/effect give @s haste 600 1</div>
-      </div>
-      <div class="qcard purple" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Убрать все эффекты</div>
-        <div class="qdesc">Сбросить все активные эффекты</div>
-        <div class="qcmd">/effect clear @s</div>
-      </div>
-      <div class="qcard purple" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Water Breathing</div>
-        <div class="qdesc">Дышать под водой</div>
-        <div class="qcmd">/effect give @s water_breathing 9999 0</div>
-      </div>
-      <div class="qcard purple" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Fire Resistance</div>
-        <div class="qdesc">Иммунитет к огню и лаве</div>
-        <div class="qcmd">/effect give @s fire_resistance 9999 0</div>
-      </div>
+    </div>
+    <div class="crow">
+      <span style="font-size:12px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Custom:</span>
+      <input class="cinput" id="custom-block" placeholder="e.g. stone_bricks, red_wool, ice..." oninput="onCustom(this)">
     </div>
   </div>
 
-  <!-- HEALTH -->
-  <div class="qpanel" id="panel-health">
-    <div class="qgrid">
-      <div class="qcard red" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Full HP</div>
-        <div class="qdesc">Восстановить все HP</div>
-        <div class="qcmd">/effect give @s regeneration 5 255</div>
-      </div>
-      <div class="qcard red" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">God Mode</div>
-        <div class="qdesc">Бесконечное здоровье (резистентность)</div>
-        <div class="qcmd">/effect give @s resistance 9999 4</div>
-      </div>
-      <div class="qcard red" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Full Hunger</div>
-        <div class="qdesc">Заполнить шкалу еды до максимума</div>
-        <div class="qcmd">/food @s set 20</div>
-      </div>
-      <div class="qcard red" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Max HP x2</div>
-        <div class="qdesc">Поднять макс. здоровье до 40 HP</div>
-        <div class="qcmd">/attribute @s generic.max_health base set 40</div>
-      </div>
-      <div class="qcard red" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Heal All Players</div>
-        <div class="qdesc">Вылечить всех на сервере</div>
-        <div class="qcmd">/effect give @a regeneration 5 255</div>
-      </div>
-      <div class="qcard red" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Saturation</div>
-        <div class="qdesc">Никогда не голодать</div>
-        <div class="qcmd">/effect give @s saturation 9999 0</div>
-      </div>
+  <div class="card">
+    <div class="ctitle"><em>◈</em> Dimensions</div>
+    <div class="dgrid">
+      <div class="dbox"><label id="lbl-l">LENGTH</label><input class="dinput" type="number" id="inp-l" value="10" min="1" oninput="generate()"><div class="dhint" id="hint-l">blocks forward</div></div>
+      <div class="dbox"><label>WIDTH</label><input class="dinput" type="number" id="inp-w" value="3" min="1" oninput="generate()"><div class="dhint">centered on player</div></div>
+      <div class="dbox"><label id="lbl-h">HEIGHT</label><input class="dinput" type="number" id="inp-h" value="3" min="1" oninput="generate()"><div class="dhint">from feet level</div></div>
     </div>
   </div>
 
-  <!-- TIME -->
-  <div class="qpanel" id="panel-time">
-    <div class="qgrid">
-      <div class="qcard yellow" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">День</div>
-        <div class="qdesc">Установить полдень (время 6000)</div>
-        <div class="qcmd">/time set day</div>
-      </div>
-      <div class="qcard yellow" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Ночь</div>
-        <div class="qdesc">Установить ночь (время 18000)</div>
-        <div class="qcmd">/time set night</div>
-      </div>
-      <div class="qcard yellow" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Рассвет</div>
-        <div class="qdesc">Начало дня (время 23000)</div>
-        <div class="qcmd">/time set 23000</div>
-      </div>
-      <div class="qcard yellow" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Закат</div>
-        <div class="qdesc">Золотой час (время 12000)</div>
-        <div class="qcmd">/time set 12000</div>
-      </div>
-      <div class="qcard yellow" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Стоп время</div>
-        <div class="qdesc">Заморозить смену дня и ночи</div>
-        <div class="qcmd">/gamerule doDaylightCycle false</div>
-      </div>
-      <div class="qcard yellow" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Вкл. время</div>
-        <div class="qdesc">Снова запустить смену времени</div>
-        <div class="qcmd">/gamerule doDaylightCycle true</div>
-      </div>
+  <div class="card">
+    <div class="ctitle"><em>◈</em> Generated Command</div>
+    <div class="prow">
+      <div class="pcell"><div class="pl">From</div><div class="pv" id="pv-from">~ ~ ~</div></div>
+      <div class="pcell"><div class="pl">To</div><div class="pv" id="pv-to">~ ~ ~</div></div>
+      <div class="pcell"><div class="pl">Volume</div><div class="pv" id="pv-size">—</div></div>
+      <div class="pcell"><div class="pl">Block</div><div class="pv" id="pv-block" style="color:var(--yellow)">air</div></div>
+    </div>
+    <div class="outbox" id="cmd-out"><span class="olabel">COMMAND</span>/fill ~ ~ ~ ~ ~ ~ air</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div style="font-size:12px;color:var(--text3);font-weight:500">T → вставь → Enter · стань в начале</div>
+      <button class="copybtn" id="copybtn-fill" onclick="copyFill();addRipple(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy Command
+      </button>
     </div>
   </div>
 
-  <!-- WEATHER -->
-  <div class="qpanel" id="panel-weather">
-    <div class="qgrid">
-      <div class="qcard blue" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Ясно</div>
-        <div class="qdesc">Солнечная погода навсегда</div>
-        <div class="qcmd">/weather clear 1000000</div>
+</div><!-- /page-fill -->
+
+<!-- ══════════════ PAGE: QUICK ══════════════ -->
+<div class="page" id="page-quick">
+  <div class="card" style="animation-delay:.05s">
+    <div class="ctitle"><em>⚡</em> Ready-to-Use Commands — кликни чтобы скопировать</div>
+    <div class="qc-tabs">
+      <button class="qtab active" data-tab="effects" onclick="switchQTab('effects');playClick()">✦ Effects</button>
+      <button class="qtab" data-tab="health" onclick="switchQTab('health');playClick()">❤ Health</button>
+      <button class="qtab" data-tab="time" onclick="switchQTab('time');playClick()">☀ Time</button>
+      <button class="qtab" data-tab="weather" onclick="switchQTab('weather');playClick()">☁ Weather</button>
+      <button class="qtab" data-tab="fun" onclick="switchQTab('fun');playClick()">★ Fun</button>
+      <button class="qtab" data-tab="game" onclick="switchQTab('game');playClick()">⚙ Game</button>
+      <button class="qtab" data-tab="cmdblock" onclick="switchQTab('cmdblock');playClick()">🟪 Cmd Block</button>
+    </div>
+
+    <div class="qpanel show" id="panel-effects"><div class="qgrid">
+      <div class="qcard purple" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Speed II · 10 мин</div><div class="qdesc">Максимальная скорость движения</div><div class="qcmd">/effect give @s speed 600 1</div></div>
+      <div class="qcard purple" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Night Vision</div><div class="qdesc">Видеть в темноте постоянно</div><div class="qcmd">/effect give @s night_vision 9999 0</div></div>
+      <div class="qcard purple" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Strength V</div><div class="qdesc">Огромный урон в рукопашную</div><div class="qcmd">/effect give @s strength 600 4</div></div>
+      <div class="qcard purple" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Jump Boost V</div><div class="qdesc">Прыгать как ракета</div><div class="qcmd">/effect give @s jump_boost 300 4</div></div>
+      <div class="qcard purple" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Haste II</div><div class="qdesc">Быстрее копать блоки</div><div class="qcmd">/effect give @s haste 600 1</div></div>
+      <div class="qcard purple" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Water Breathing</div><div class="qdesc">Дышать под водой</div><div class="qcmd">/effect give @s water_breathing 9999 0</div></div>
+      <div class="qcard purple" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Fire Resistance</div><div class="qdesc">Иммунитет к огню и лаве</div><div class="qcmd">/effect give @s fire_resistance 9999 0</div></div>
+      <div class="qcard purple" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Убрать все эффекты</div><div class="qdesc">Сбросить всё активное</div><div class="qcmd">/effect clear @s</div></div>
+    </div></div>
+
+    <div class="qpanel" id="panel-health"><div class="qgrid">
+      <div class="qcard red" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Full HP</div><div class="qdesc">Восстановить все HP</div><div class="qcmd">/effect give @s regeneration 5 255</div></div>
+      <div class="qcard red" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">God Mode</div><div class="qdesc">Бесконечное здоровье</div><div class="qcmd">/effect give @s resistance 9999 4</div></div>
+      <div class="qcard red" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Saturation</div><div class="qdesc">Никогда не голодать</div><div class="qcmd">/effect give @s saturation 9999 0</div></div>
+      <div class="qcard red" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Max HP x2</div><div class="qdesc">40 HP максимального здоровья</div><div class="qcmd">/attribute @s generic.max_health base set 40</div></div>
+      <div class="qcard red" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Heal All Players</div><div class="qdesc">Вылечить всех на сервере</div><div class="qcmd">/effect give @a regeneration 5 255</div></div>
+      <div class="qcard red" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Absorption IV</div><div class="qdesc">Дополнительные жёлтые сердца</div><div class="qcmd">/effect give @s absorption 600 3</div></div>
+    </div></div>
+
+    <div class="qpanel" id="panel-time"><div class="qgrid">
+      <div class="qcard yellow" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">День</div><div class="qdesc">Установить полдень</div><div class="qcmd">/time set day</div></div>
+      <div class="qcard yellow" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Ночь</div><div class="qdesc">Установить ночь</div><div class="qcmd">/time set night</div></div>
+      <div class="qcard yellow" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Рассвет</div><div class="qdesc">Начало дня (23000)</div><div class="qcmd">/time set 23000</div></div>
+      <div class="qcard yellow" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Закат</div><div class="qdesc">Золотой час (12000)</div><div class="qcmd">/time set 12000</div></div>
+      <div class="qcard yellow" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Стоп время</div><div class="qdesc">Заморозить смену дня</div><div class="qcmd">/gamerule doDaylightCycle false</div></div>
+      <div class="qcard yellow" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Вкл. время</div><div class="qdesc">Снова запустить цикл</div><div class="qcmd">/gamerule doDaylightCycle true</div></div>
+    </div></div>
+
+    <div class="qpanel" id="panel-weather"><div class="qgrid">
+      <div class="qcard blue" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Ясно</div><div class="qdesc">Солнечная погода</div><div class="qcmd">/weather clear 1000000</div></div>
+      <div class="qcard blue" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Дождь</div><div class="qdesc">Включить дождь</div><div class="qcmd">/weather rain</div></div>
+      <div class="qcard blue" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Гроза</div><div class="qdesc">Гром и молния</div><div class="qcmd">/weather thunder</div></div>
+      <div class="qcard blue" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Молния сюда</div><div class="qdesc">Удар молнии в игрока</div><div class="qcmd">/summon lightning_bolt ~ ~ ~</div></div>
+      <div class="qcard blue" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Стоп дождь</div><div class="qdesc">Отключить погодный цикл</div><div class="qcmd">/gamerule doWeatherCycle false</div></div>
+      <div class="qcard blue" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Вкл. цикл</div><div class="qdesc">Снова включить погоду</div><div class="qcmd">/gamerule doWeatherCycle true</div></div>
+    </div></div>
+
+    <div class="qpanel" id="panel-fun"><div class="qgrid">
+      <div class="qcard orange" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Заряженный Крипер</div><div class="qdesc">Призвать заряженного крипера</div><div class="qcmd">/summon creeper ~ ~ ~ {powered:1}</div></div>
+      <div class="qcard orange" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Фейерверк</div><div class="qdesc">Запустить ракету</div><div class="qcmd">/summon firework_rocket ~ ~1 ~</div></div>
+      <div class="qcard pink" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Эндер-Дракон</div><div class="qdesc">Призвать дракона сюда</div><div class="qcmd">/summon ender_dragon ~ ~ ~</div></div>
+      <div class="qcard orange" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Убить всех мобов</div><div class="qdesc">Кроме игроков</div><div class="qcmd">/kill @e[type=!player]</div></div>
+      <div class="qcard orange" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Левитация</div><div class="qdesc">Взлететь в воздух</div><div class="qcmd">/effect give @s levitation 10 3</div></div>
+      <div class="qcard pink" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Частицы Тотема</div><div class="qdesc">Красивые частицы вокруг</div><div class="qcmd">/particle totem ~ ~1 ~ 0.5 1 0.5 0.1 50</div></div>
+      <div class="qcard orange" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">ТП в центр мира</div><div class="qdesc">Телепорт на 0 64 0</div><div class="qcmd">/tp @s 0 64 0</div></div>
+      <div class="qcard pink" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Голова Дракона</div><div class="qdesc">Дать голову эндер-дракона</div><div class="qcmd">/give @s dragon_head 1</div></div>
+    </div></div>
+
+    <div class="qpanel" id="panel-game"><div class="qgrid">
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Creative Mode</div><div class="qdesc">Режим творчества</div><div class="qcmd">/gamemode creative</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Survival Mode</div><div class="qdesc">Режим выживания</div><div class="qcmd">/gamemode survival</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Spectator</div><div class="qdesc">Режим наблюдателя</div><div class="qcmd">/gamemode spectator</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Keep Inventory</div><div class="qdesc">Не терять вещи при смерти</div><div class="qcmd">/gamerule keepInventory true</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">No Fall Damage</div><div class="qdesc">Нет урона от падения</div><div class="qcmd">/gamerule fallDamage false</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">XP Max</div><div class="qdesc">Дать 9999 уровней опыта</div><div class="qcmd">/xp add @s 9999 levels</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Clear Inventory</div><div class="qdesc">Очистить весь инвентарь</div><div class="qcmd">/clear @s</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Моб-спавн выкл</div><div class="qdesc">Отключить спавн мобов</div><div class="qcmd">/gamerule doMobSpawning false</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">ОП игрок</div><div class="qdesc">Выдать права оператора</div><div class="qcmd">/op @s</div></div>
+      <div class="qcard green" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Fly On</div><div class="qdesc">Включить полёт (abilities)</div><div class="qcmd">/ability @s mayfly true</div></div>
+    </div></div>
+
+    <!-- COMMAND BLOCK TAB -->
+    <div class="qpanel" id="panel-cmdblock">
+      <!-- Get command block card -->
+      <div class="cmdblock-get">
+        <div class="cmdblock-icon">🟪</div>
+        <div class="cmdblock-info">
+          <div class="cmdblock-title">Получить командный блок</div>
+          <div class="cmdblock-desc">В выживании командные блоки недоступны. Используй команду:</div>
+          <div class="cmdblock-cmd" id="cmdblock-get-cmd">/give @s command_block</div>
+          <button class="get-btn" onclick="copyCmdBlockGet();addRipple(this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Скопировать
+          </button>
+        </div>
       </div>
-      <div class="qcard blue" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Дождь</div>
-        <div class="qdesc">Включить дождь</div>
-        <div class="qcmd">/weather rain</div>
-      </div>
-      <div class="qcard blue" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Гроза</div>
-        <div class="qdesc">Гром, молния, дождь</div>
-        <div class="qcmd">/weather thunder</div>
-      </div>
-      <div class="qcard blue" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Молния сюда</div>
-        <div class="qdesc">Удар молнии в игрока</div>
-        <div class="qcmd">/summon lightning_bolt ~ ~ ~</div>
-      </div>
-      <div class="qcard blue" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Стоп дождь</div>
-        <div class="qdesc">Отключить погодный цикл</div>
-        <div class="qcmd">/gamerule doWeatherCycle false</div>
-      </div>
-      <div class="qcard blue" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Вкл. цикл</div>
-        <div class="qdesc">Снова включить погодный цикл</div>
-        <div class="qcmd">/gamerule doWeatherCycle true</div>
+      <!-- Command block commands grid -->
+      <div class="qgrid">
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Повторная команда на игрока</div><div class="qdesc">Телепорт каждого к 0,64,0 постоянно</div><div class="qcmd">/tp @a 0 64 0</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Лечить всех каждый тик</div><div class="qdesc">В блок типа «Repeat»</div><div class="qcmd">/effect give @a regeneration 2 10</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Убить всё кроме @a</div><div class="qdesc">Авто-чистка мобов</div><div class="qcmd">/kill @e[type=!player]</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Сообщение всем</div><div class="qdesc">Broadcast в чат</div><div class="qcmd">/say Привет, мир!</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Title на экран</div><div class="qdesc">Большой текст в центре</div><div class="qcmd">/title @a title {"text":"EPIC","color":"gold"}</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Subtitle</div><div class="qdesc">Подзаголовок под title</div><div class="qcmd">/title @a subtitle {"text":"by MC Commander"}</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Actionbar</div><div class="qdesc">Текст над хотбаром</div><div class="qcmd">/title @a actionbar {"text":"HP: ❤❤❤"}</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Summon на триггер</div><div class="qdesc">Спавн крипера при входе в зону</div><div class="qcmd">/summon creeper ~ ~1 ~ {powered:1b}</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Scoreboard цель</div><div class="qdesc">Создать таблицу очков</div><div class="qcmd">/scoreboard objectives add kills playerKillCount</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Scoreboard сайдбар</div><div class="qdesc">Показать очки сбоку</div><div class="qcmd">/scoreboard objectives setdisplay sidebar kills</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Цепной блок</div><div class="qdesc">Получить Chain Command Block</div><div class="qcmd">/give @s chain_command_block</div></div>
+        <div class="qcard indigo" onclick="copyQuick(this);addRipple(this)"><span class="copy-hint">CLICK TO COPY</span><div class="qname">Repeat блок</div><div class="qdesc">Повторяющийся командный блок</div><div class="qcmd">/give @s repeating_command_block</div></div>
       </div>
     </div>
-  </div>
 
-  <!-- FUN -->
-  <div class="qpanel" id="panel-fun">
-    <div class="qgrid">
-      <div class="qcard orange" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Взрыв рядом</div>
-        <div class="qdesc">Призвать заряженного крипера</div>
-        <div class="qcmd">/summon creeper ~ ~ ~ {powered:1}</div>
+  </div>
+</div><!-- /page-quick -->
+
+<!-- ══════════════ PAGE: ENCHANTMENTS ══════════════ -->
+<div class="page" id="page-ench">
+  <div class="ench-layout">
+
+    <!-- SIDEBAR: item picker -->
+    <div class="item-sidebar">
+      <div class="ib-title">Выбери предмет</div>
+      <div class="ib-cat">
+        <div class="ib-cat-label">⚔ Оружие</div>
+        <div class="ib-grid">
+          <button class="ibtn active" onclick="pickItem(this,'sword','Меч','⚔','weapon');playClick()"><span class="ii">⚔</span><span>Меч</span></button>
+          <button class="ibtn" onclick="pickItem(this,'axe','Топор','🪓','weapon_axe');playClick()"><span class="ii">🪓</span><span>Топор</span></button>
+          <button class="ibtn" onclick="pickItem(this,'trident','Трезубец','🔱','trident');playClick()"><span class="ii">🔱</span><span>Трезубец</span></button>
+          <button class="ibtn" onclick="pickItem(this,'bow','Лук','🏹','bow');playClick()"><span class="ii">🏹</span><span>Лук</span></button>
+          <button class="ibtn" onclick="pickItem(this,'crossbow','Арбалет','🎯','crossbow');playClick()"><span class="ii">🎯</span><span>Арбалет</span></button>
+          <button class="ibtn" onclick="pickItem(this,'mace','Булава','🔨','mace');playClick()"><span class="ii">🔨</span><span>Булава</span></button>
+        </div>
       </div>
-      <div class="qcard orange" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Фейерверк</div>
-        <div class="qdesc">Запустить ракету фейерверка</div>
-        <div class="qcmd">/summon firework_rocket ~ ~1 ~</div>
+      <div class="ib-cat">
+        <div class="ib-cat-label">🛡 Броня</div>
+        <div class="ib-grid">
+          <button class="ibtn" onclick="pickItem(this,'helmet','Шлем','🪖','armor_head');playClick()"><span class="ii">🪖</span><span>Шлем</span></button>
+          <button class="ibtn" onclick="pickItem(this,'chestplate','Нагрудник','🥻','armor_chest');playClick()"><span class="ii">🥻</span><span>Нагр.</span></button>
+          <button class="ibtn" onclick="pickItem(this,'leggings','Поножи','👖','armor_legs');playClick()"><span class="ii">👖</span><span>Поножи</span></button>
+          <button class="ibtn" onclick="pickItem(this,'boots','Ботинки','👢','armor_feet');playClick()"><span class="ii">👢</span><span>Ботинки</span></button>
+          <button class="ibtn" onclick="pickItem(this,'shield','Щит','🛡','shield');playClick()"><span class="ii">🛡</span><span>Щит</span></button>
+          <button class="ibtn" onclick="pickItem(this,'elytra','Элитры','🪂','elytra');playClick()"><span class="ii">🪂</span><span>Элитры</span></button>
+        </div>
       </div>
-      <div class="qcard pink" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Дракон здесь</div>
-        <div class="qdesc">Призвать эндер-дракона</div>
-        <div class="qcmd">/summon ender_dragon ~ ~ ~</div>
-      </div>
-      <div class="qcard orange" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Убить всех мобов</div>
-        <div class="qdesc">Убить всех существ кроме игроков</div>
-        <div class="qcmd">/kill @e[type=!player]</div>
-      </div>
-      <div class="qcard orange" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Левитация</div>
-        <div class="qdesc">Взлететь в воздух</div>
-        <div class="qcmd">/effect give @s levitation 10 3</div>
-      </div>
-      <div class="qcard pink" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Наночастицы</div>
-        <div class="qdesc">Красивые частицы вокруг игрока</div>
-        <div class="qcmd">/particle totem ~ ~1 ~ 0.5 1 0.5 0.1 50</div>
-      </div>
-      <div class="qcard orange" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Телепорт на 0 64 0</div>
-        <div class="qdesc">Прыжок в центр мира</div>
-        <div class="qcmd">/tp @s 0 64 0</div>
-      </div>
-      <div class="qcard pink" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Голова дракона</div>
-        <div class="qdesc">Дать голову эндер-дракона</div>
-        <div class="qcmd">/give @s dragon_head 1</div>
+      <div class="ib-cat">
+        <div class="ib-cat-label">⛏ Инструменты</div>
+        <div class="ib-grid">
+          <button class="ibtn" onclick="pickItem(this,'pickaxe','Кирка','⛏','pickaxe');playClick()"><span class="ii">⛏</span><span>Кирка</span></button>
+          <button class="ibtn" onclick="pickItem(this,'shovel','Лопата','🪣','shovel');playClick()"><span class="ii">🪣</span><span>Лопата</span></button>
+          <button class="ibtn" onclick="pickItem(this,'hoe','Мотыга','🌿','hoe');playClick()"><span class="ii">🌿</span><span>Мотыга</span></button>
+          <button class="ibtn" onclick="pickItem(this,'fishing_rod','Удочка','🎣','fishing');playClick()"><span class="ii">🎣</span><span>Удочка</span></button>
+          <button class="ibtn" onclick="pickItem(this,'shears','Ножницы','✂','shears');playClick()"><span class="ii">✂</span><span>Ножницы</span></button>
+          <button class="ibtn" onclick="pickItem(this,'flint_and_steel','Огниво','🔥','flint');playClick()"><span class="ii">🔥</span><span>Огниво</span></button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- GAME -->
-  <div class="qpanel" id="panel-game">
-    <div class="qgrid">
-      <div class="qcard green" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Creative Mode</div>
-        <div class="qdesc">Переключить в режим творчества</div>
-        <div class="qcmd">/gamemode creative</div>
-      </div>
-      <div class="qcard green" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Survival Mode</div>
-        <div class="qdesc">Переключить в выживание</div>
-        <div class="qcmd">/gamemode survival</div>
-      </div>
-      <div class="qcard green" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Spectator</div>
-        <div class="qdesc">Режим наблюдателя</div>
-        <div class="qcmd">/gamemode spectator</div>
-      </div>
-      <div class="qcard green" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Keep Inventory</div>
-        <div class="qdesc">Не терять вещи при смерти</div>
-        <div class="qcmd">/gamerule keepInventory true</div>
-      </div>
-      <div class="qcard green" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">No Fall Damage</div>
-        <div class="qdesc">Нет урона от падения</div>
-        <div class="qcmd">/gamerule fallDamage false</div>
-      </div>
-      <div class="qcard green" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">XP Max Level</div>
-        <div class="qdesc">Дать 9999 уровней опыта</div>
-        <div class="qcmd">/xp add @s 9999 levels</div>
-      </div>
-      <div class="qcard green" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Clear Inventory</div>
-        <div class="qdesc">Очистить весь инвентарь</div>
-        <div class="qcmd">/clear @s</div>
-      </div>
-      <div class="qcard green" onclick="copyQuick(this)">
-        <span class="qcopy-hint">CLICK TO COPY</span>
-        <div class="qname">Моб-спавн выкл</div>
-        <div class="qdesc">Отключить спавн мобов</div>
-        <div class="qcmd">/gamerule doMobSpawning false</div>
-      </div>
-    </div>
-  </div>
-</div>
+    <!-- RIGHT: enchants + output -->
+    <div class="ench-panel">
 
-<!-- TOAST -->
-<div class="toast" id="toast">✓ Скопировано!</div>
+      <!-- selected item display -->
+      <div class="ench-selected-item" id="ench-sel-item">
+        <span class="esi-icon" id="esi-icon">⚔</span>
+        <div class="esi-info">
+          <div class="esi-name" id="esi-name">Меч</div>
+          <div class="esi-sub" id="esi-sub">diamond_sword · выбери зачарования ниже</div>
+        </div>
+        <div style="margin-left:auto;text-align:right;flex-shrink:0">
+          <div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Материал</div>
+          <select id="mat-select" onchange="updateEnchOutput()" style="background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:6px 10px;color:var(--yellow);font-family:var(--font-code);font-size:12px;outline:none;cursor:pointer">
+            <option value="wooden">Деревянный</option>
+            <option value="stone">Каменный</option>
+            <option value="golden">Золотой</option>
+            <option value="iron">Железный</option>
+            <option value="diamond" selected>Алмазный</option>
+            <option value="netherite">Незеритовый</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- enchant list scrollable -->
+      <div class="ench-list-card">
+        <div class="ctitle"><em>✦</em> Зачарования <span id="ench-count-label" style="margin-left:auto;font-size:10px;color:var(--text3);letter-spacing:.05em;text-transform:none;font-weight:400">выбрано: 0</span></div>
+        <div class="ench-list-scroll">
+          <div class="ench-list" id="ench-list">
+            <div style="color:var(--text3);font-size:13px;padding:10px">Выбери предмет слева</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- output -->
+      <div class="ench-out-box">
+        <div class="ctitle"><em>◈</em> Команда /give</div>
+        <div class="ename-row">
+          <input class="ename-input" id="ename-input" placeholder="Кастомное имя (опционально)..." oninput="updateEnchOutput()">
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <span class="ecount-label">КОЛ-ВО:</span>
+            <input class="ecount-input" type="number" id="ench-count" value="1" min="1" max="64" oninput="updateEnchOutput()">
+          </div>
+        </div>
+        <div class="ench-tags" id="ench-tags"></div>
+        <div class="enchcmd-box" id="ench-cmd-box"><span class="no-ench-msg">Выбери предмет и зачарования...</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <button style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);color:var(--red);border-radius:8px;padding:10px 18px;font-size:12px;font-weight:700;font-family:var(--font-ui);letter-spacing:.08em;cursor:pointer;transition:all .18s;text-transform:uppercase" onclick="clearEnch();playClick()">✕ Сбросить всё</button>
+          <button class="copybtn" id="copybtn-ench" onclick="copyEnch();addRipple(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy /give
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /ench-panel -->
+  </div>
+</div><!-- /page-ench -->
 
 <!-- FOOTER -->
 <div class="footer">
   <a class="ig-link" href="https://www.instagram.com/specter_xpath?igsh=MTdjMml6eWZ2MWJtYQ==" target="_blank" rel="noopener">
-    <svg class="ig-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#f09433"/>
-          <stop offset="25%" stop-color="#e6683c"/>
-          <stop offset="50%" stop-color="#dc2743"/>
-          <stop offset="75%" stop-color="#cc2366"/>
-          <stop offset="100%" stop-color="#bc1888"/>
-        </linearGradient>
-      </defs>
-      <rect x="2" y="2" width="32" height="32" rx="9" fill="url(#ig-grad)"/>
-      <rect x="8" y="8" width="20" height="20" rx="5" stroke="white" stroke-width="2" fill="none"/>
-      <circle cx="18" cy="18" r="5" stroke="white" stroke-width="2" fill="none"/>
-      <circle cx="24.5" cy="11.5" r="1.5" fill="white"/>
-    </svg>
-    <div class="ig-info">
-      <span class="ig-handle">@specter_xpath</span>
-      <span class="ig-sub">INSTAGRAM · ПОДПИСЫВАЙСЯ</span>
-    </div>
-    <svg style="margin-left:4px;opacity:.4" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    <svg class="ig-icon" viewBox="0 0 36 36" fill="none"><defs><linearGradient id="igg" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><rect x="2" y="2" width="32" height="32" rx="9" fill="url(#igg)"/><rect x="8" y="8" width="20" height="20" rx="5" stroke="white" stroke-width="2" fill="none"/><circle cx="18" cy="18" r="5" stroke="white" stroke-width="2" fill="none"/><circle cx="24.5" cy="11.5" r="1.5" fill="white"/></svg>
+    <div class="ig-info"><span class="ig-handle">@specter_xpath</span><span class="ig-sub">INSTAGRAM · ПОДПИСЫВАЙСЯ</span></div>
+    <svg style="margin-left:6px;opacity:.35" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
   </a>
-  <div class="footer-copy">MC Fill Commander · Made for survival &amp; creative · 2025</div>
+  <div class="footer-copy">MC Commander · specter_xpath · 2025</div>
 </div>
 
 </div><!-- /wrap -->
+<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toast-text">Скопировано!</span></div>
 
 <script>
+/* ══ AUDIO ENGINE (Web Audio API — Minecraft-style clicks) ══ */
+let audioCtx=null;
+function getAudio(){if(!audioCtx)try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}return audioCtx;}
+function playClick(){
+  const ctx=getAudio();if(!ctx)return;
+  try{
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type='square';o.frequency.setValueAtTime(800,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(400,ctx.currentTime+0.06);
+    g.gain.setValueAtTime(0.15,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.08);
+    o.start(ctx.currentTime);o.stop(ctx.currentTime+0.09);
+  }catch(e){}
+}
+function playSuccess(){
+  const ctx=getAudio();if(!ctx)return;
+  try{
+    [0,0.06,0.12].forEach((t,i)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='sine';
+      const freqs=[523,659,784];
+      o.frequency.setValueAtTime(freqs[i],ctx.currentTime+t);
+      g.gain.setValueAtTime(0.12,ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t+0.15);
+      o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.18);
+    });
+  }catch(e){}
+}
+
+/* ══ RIPPLE EFFECT ══ */
+function addRipple(btn,e){
+  const r=document.createElement('span');
+  r.className='ripple';
+  const rect=btn.getBoundingClientRect();
+  const size=Math.max(rect.width,rect.height);
+  r.style.cssText=`width:${size}px;height:${size}px;left:${rect.width/2-size/2}px;top:${rect.height/2-size/2}px`;
+  btn.style.position='relative';
+  btn.appendChild(r);
+  setTimeout(()=>r.remove(),600);
+}
+
 /* ══ PARTICLES ══ */
-(function(){
-  const c=document.getElementById('particles');
-  const ctx=c.getContext('2d');
+(()=>{
+  const c=document.getElementById('particles'),ctx=c.getContext('2d');
   let W,H,pts=[];
-  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  const resize=()=>{W=c.width=window.innerWidth;H=c.height=window.innerHeight};
   resize();window.addEventListener('resize',resize);
-  function mkPt(){return{
-    x:Math.random()*W,y:Math.random()*H,
-    vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,
-    r:Math.random()*1.5+.5,
-    a:Math.random(),va:(Math.random()-.5)*.008,
-    col:Math.random()<.6?'0,255,136':Math.random()<.5?'56,189,248':'167,139,250'
-  }}
-  for(let i=0;i<55;i++)pts.push(mkPt());
-  function frame(){
+  const mk=()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.6+.3,a:Math.random(),va:(Math.random()-.5)*.008,col:Math.random()<.6?'0,255,136':Math.random()<.5?'56,189,248':'167,139,250'});
+  for(let i=0;i<65;i++)pts.push(mk());
+  const frame=()=>{
     ctx.clearRect(0,0,W,H);
     pts.forEach(p=>{
       p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
       if(p.a<=0||p.a>=1)p.va*=-1;
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
-      if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
       ctx.fillStyle=`rgba(${p.col},${p.a*.35})`;ctx.fill();
     });
     requestAnimationFrame(frame);
-  }
+  };
   frame();
 })();
 
+/* ══ THEME ══ */
+let isDark=true;
+function toggleTheme(){
+  isDark=!isDark;
+  document.body.classList.toggle('light',!isDark);
+  document.getElementById('theme-toggle').textContent=isDark?'🌙':'☀️';
+  localStorage.setItem('mc-theme',isDark?'dark':'light');
+}
+(()=>{const s=localStorage.getItem('mc-theme');if(s==='light'){isDark=false;document.body.classList.add('light');document.getElementById('theme-toggle').textContent='☀️';}})();
+
+/* ══ PAGES ══ */
+function switchPage(p){
+  ['fill','quick','ench'].forEach(x=>{
+    document.getElementById('page-'+x).className='page'+(x===p?' active':'');
+    document.getElementById('ntab-'+x).className='ntab'+(x===p?' active':'');
+  });
+}
+
+/* ══ VERSION ══ */
+let version='modern';
+function setVersion(v){
+  version=v;
+  // desktop pills
+  document.getElementById('btn-modern').className='vpill'+(v==='modern'?' am':'');
+  document.getElementById('btn-legacy').className='vpill'+(v==='legacy'?' al':'');
+  document.getElementById('btn-pe').className='vpill'+(v==='pe'?' ape':'');
+  // mobile pills
+  document.getElementById('btn-modern-m').className='vpill'+(v==='modern'?' am':'');
+  document.getElementById('btn-legacy-m').className='vpill'+(v==='legacy'?' al':'');
+  document.getElementById('btn-pe-m').className='vpill'+(v==='pe'?' ape':'');
+  // warn
+  if(v==='modern'){
+    document.getElementById('mwarn').className='warn';
+    document.getElementById('mwarn-text').innerHTML='Modern 1.18.1+: world height <strong>Y -64</strong> to Y 320. Лава ниже Y 10!';
+  } else if(v==='pe'){
+    document.getElementById('mwarn').className='warn';
+    document.getElementById('mwarn-text').innerHTML='Bedrock/PE Edition: используй имена без namespace (air, stone). Часть команд отличается от Java!';
+  } else {
+    document.getElementById('mwarn').className='warn h';
+  }
+  // update cmd block get command
+  const cbCmd=document.getElementById('cmdblock-get-cmd');
+  if(cbCmd){
+    if(v==='pe')cbCmd.textContent='/give @s command_block 1';
+    else cbCmd.textContent='/give @s command_block';
+  }
+  generate();updateEnchOutput();
+}
+
 /* ══ FILL GENERATOR ══ */
-let version='modern',direction='north',blockId='air';
+let direction='north',blockId='air';
 const DIAG=['nw','ne','sw','se','up-north','down-south','down-north'];
 const ALL_DIRS=['north','south','east','west','up','down','nw','ne','sw','se','up-north','down-south','down-north'];
 
-function setVersion(v){
-  version=v;
-  document.getElementById('btn-modern').className='vpill'+(v==='modern'?' am':'');
-  document.getElementById('btn-legacy').className='vpill'+(v==='legacy'?' al':'');
-  document.getElementById('mwarn').className='warn'+(v==='modern'?'':' h');
-  generate();
-}
 function setDir(d){
   direction=d;
-  ALL_DIRS.forEach(x=>{
-    const b=document.getElementById('dir-'+x);if(!b)return;
-    b.className='dbtn'+(DIAG.includes(x)?' diag':'')+(x===d?' active':'');
-  });
+  ALL_DIRS.forEach(x=>{const b=document.getElementById('dir-'+x);if(!b)return;b.className='dbtn'+(DIAG.includes(x)?' diag':'')+(x===d?' active':'');});
   const isStair=['up-north','down-south','down-north'].includes(d);
   document.getElementById('stinfo').className='stinfo'+(isStair?' show':'');
   const isVert=['up','down'].includes(d);
@@ -773,16 +791,10 @@ function setDir(d){
   document.getElementById('hint-l').textContent=isStair?'steps':'blocks forward';
   generate();
 }
-function selectBlock(btn,id){
-  document.querySelectorAll('.bbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');blockId=id;
-  document.getElementById('custom-block').value='';generate();
-}
-function onCustom(el){
-  const v=el.value.trim();
-  if(v){document.querySelectorAll('.bbtn').forEach(b=>b.classList.remove('active'));blockId=v;generate();}
-}
+function selectBlock(btn,id){document.querySelectorAll('.bbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');blockId=id;document.getElementById('custom-block').value='';generate();}
+function onCustom(el){const v=el.value.trim();if(v){document.querySelectorAll('.bbtn').forEach(b=>b.classList.remove('active'));blockId=v;generate();}}
 function getBlock(){
+  if(version==='pe')return blockId;
   if(blockId==='air')return version==='modern'?'minecraft:air':'air';
   return version==='modern'?'minecraft:'+blockId:blockId;
 }
@@ -794,8 +806,7 @@ function generate(){
   const W=Math.max(1,parseInt(document.getElementById('inp-w').value)||1);
   const H=Math.max(1,parseInt(document.getElementById('inp-h').value)||1);
   const[wn,wp]=wOff(W);const[w2n,w2p]=wOff(H);
-  const out=document.getElementById('cmd-out');
-  let cmd='',fr='',to='',sz='';
+  const out=document.getElementById('cmd-out');let cmd='',fr='',to='',sz='';
   if(direction==='north'){cmd=bc(wn,0,-1,wp,H-1,-L);fr=`${fmt(wn)} ~ ~-1`;to=`${fmt(wp)} ${fmt(H-1)} ${fmt(-L)}`;sz=`${W}×${H}×${L}`;}
   else if(direction==='south'){cmd=bc(wn,0,1,wp,H-1,L);fr=`${fmt(wn)} ~ ~1`;to=`${fmt(wp)} ${fmt(H-1)} ${fmt(L)}`;sz=`${W}×${H}×${L}`;}
   else if(direction==='east'){cmd=bc(1,0,wn,L,H-1,wp);fr=`~1 ~ ${fmt(wn)}`;to=`${fmt(L)} ${fmt(H-1)} ${fmt(wp)}`;sz=`${L}×${H}×${W}`;}
@@ -806,61 +817,266 @@ function generate(){
   else if(direction==='ne'){cmd=bc(1,0,-1,L,H-1,-L);fr=`~1 ~ ~-1`;to=`${fmt(L)} ${fmt(H-1)} ${fmt(-L)}`;sz=`${L}×${H}×${L}`;}
   else if(direction==='sw'){cmd=bc(-1,0,1,-L,H-1,L);fr=`~-1 ~ ~1`;to=`${fmt(-L)} ${fmt(H-1)} ${fmt(L)}`;sz=`${L}×${H}×${L}`;}
   else if(direction==='se'){cmd=bc(1,0,1,L,H-1,L);fr=`~1 ~ ~1`;to=`${fmt(L)} ${fmt(H-1)} ${fmt(L)}`;sz=`${L}×${H}×${L}`;}
-  else if(direction==='up-north'){
-    let ls=[];for(let i=0;i<L;i++)ls.push(bc(wn,i,-(i+1),wp,i+H-1,-(i+1)));
-    cmd=ls.join('\n');out.className='outbox multi';fr=`step 1/${L}`;to=`step ${L}`;sz=`${W}×${H}×${L}`;
-    out.textContent=cmd;setPrev(fr,to,sz);return;
-  } else if(direction==='down-south'){
-    let ls=[];for(let i=0;i<L;i++)ls.push(bc(wn,-i,i+1,wp,-(i+H-1),i+1));
-    cmd=ls.join('\n');out.className='outbox multi';fr=`step 1/${L}`;to=`step ${L}`;sz=`${W}×${H}×${L}`;
-    out.textContent=cmd;setPrev(fr,to,sz);return;
-  } else if(direction==='down-north'){
-    let ls=[];for(let i=0;i<L;i++)ls.push(bc(wn,-i,-(i+1),wp,-(i+H-1),-(i+1)));
-    cmd=ls.join('\n');out.className='outbox multi';fr=`step 1/${L}`;to=`step ${L}`;sz=`${W}×${H}×${L}`;
-    out.textContent=cmd;setPrev(fr,to,sz);return;
-  }
+  else if(direction==='up-north'){let ls=[];for(let i=0;i<L;i++)ls.push(bc(wn,i,-(i+1),wp,i+H-1,-(i+1)));cmd=ls.join('\n');out.className='outbox multi';fr=`step 1/${L}`;to=`step ${L}`;sz=`${W}×${H}×${L}`;out.textContent=cmd;setPrev(fr,to,sz);return;}
+  else if(direction==='down-south'){let ls=[];for(let i=0;i<L;i++)ls.push(bc(wn,-i,i+1,wp,-(i+H-1),i+1));cmd=ls.join('\n');out.className='outbox multi';fr=`step 1/${L}`;to=`step ${L}`;sz=`${W}×${H}×${L}`;out.textContent=cmd;setPrev(fr,to,sz);return;}
+  else if(direction==='down-north'){let ls=[];for(let i=0;i<L;i++)ls.push(bc(wn,-i,-(i+1),wp,-(i+H-1),-(i+1)));cmd=ls.join('\n');out.className='outbox multi';fr=`step 1/${L}`;to=`step ${L}`;sz=`${W}×${H}×${L}`;out.textContent=cmd;setPrev(fr,to,sz);return;}
   out.className='outbox';out.textContent=cmd;setPrev(fr,to,sz);
 }
 function setPrev(f,t,s){
-  document.getElementById('pv-from').textContent=f;
-  document.getElementById('pv-to').textContent=t;
-  document.getElementById('pv-size').textContent=s;
-  document.getElementById('pv-block').textContent=getBlock();
+  document.getElementById('pv-from').textContent=f;document.getElementById('pv-to').textContent=t;
+  document.getElementById('pv-size').textContent=s;document.getElementById('pv-block').textContent=getBlock();
 }
 function copyFill(){
-  navigator.clipboard.writeText(document.getElementById('cmd-out').textContent).then(()=>{
-    const b=document.getElementById('copybtn');
-    b.classList.add('flash');
+  const text=document.getElementById('cmd-out').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    playSuccess();
+    showToast('📋 Команда скопирована!');
+    const b=document.getElementById('copybtn-fill');b.classList.add('flash');
     b.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
     setTimeout(()=>{b.classList.remove('flash');b.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Command`;},1800);
   });
 }
 
 /* ══ QUICK COMMANDS ══ */
-function switchTab(t){
-  document.querySelectorAll('.qtab').forEach(b=>{
-    b.className='qtab'+(b.dataset.tab===t?' active':'');
-  });
-  document.querySelectorAll('.qpanel').forEach(p=>{
-    p.className='qpanel'+(p.id==='panel-'+t?' show':'');
-  });
+function switchQTab(t){
+  document.querySelectorAll('.qtab').forEach(b=>{b.className='qtab'+(b.dataset.tab===t?' active':'');});
+  document.querySelectorAll('.qpanel').forEach(p=>{p.className='qpanel'+(p.id==='panel-'+t?' show':'');});
 }
+
 let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-text').textContent=msg||'✓ Скопировано!';
+  const icon=t.querySelector('.toast-icon');
+  icon.style.animation='none';void icon.offsetWidth;icon.style.animation='';
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
 function copyQuick(card){
   const cmd=card.querySelector('.qcmd').textContent;
   navigator.clipboard.writeText(cmd).then(()=>{
-    const t=document.getElementById('toast');
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer=setTimeout(()=>t.classList.remove('show'),1800);
-    card.style.transition='border-color .1s';
+    playSuccess();
+    showToast('📋 Скопировано в буфер!');
+    card.style.transition='border-color .1s,box-shadow .1s';
     card.style.borderColor='var(--green)';
-    setTimeout(()=>{card.style.borderColor='';},600);
+    card.style.boxShadow='0 0 20px rgba(0,255,136,0.25)';
+    setTimeout(()=>{card.style.borderColor='';card.style.boxShadow='';},700);
+  });
+}
+
+function copyCmdBlockGet(){
+  const cmd=document.getElementById('cmdblock-get-cmd').textContent;
+  navigator.clipboard.writeText(cmd).then(()=>{playSuccess();showToast('🟪 Команда скопирована!');});
+}
+
+/* ══ ENCHANTMENT GENERATOR ══ */
+const ITEMS={
+  sword:{name:'Меч',icon:'⚔',cat:'weapon',mat:['wooden','stone','golden','iron','diamond','netherite']},
+  axe:{name:'Топор',icon:'🪓',cat:'weapon_axe',mat:['wooden','stone','golden','iron','diamond','netherite']},
+  trident:{name:'Трезубец',icon:'🔱',cat:'trident',mat:['']},
+  bow:{name:'Лук',icon:'🏹',cat:'bow',mat:['']},
+  crossbow:{name:'Арбалет',icon:'🎯',cat:'crossbow',mat:['']},
+  mace:{name:'Булава',icon:'🔨',cat:'mace',mat:['']},
+  helmet:{name:'Шлем',icon:'🪖',cat:'armor_head',mat:['leather','chainmail','golden','iron','diamond','netherite']},
+  chestplate:{name:'Нагрудник',icon:'🥻',cat:'armor_chest',mat:['leather','chainmail','golden','iron','diamond','netherite']},
+  leggings:{name:'Поножи',icon:'👖',cat:'armor_legs',mat:['leather','chainmail','golden','iron','diamond','netherite']},
+  boots:{name:'Ботинки',icon:'👢',cat:'armor_feet',mat:['leather','chainmail','golden','iron','diamond','netherite']},
+  shield:{name:'Щит',icon:'🛡',cat:'shield',mat:['']},
+  elytra:{name:'Элитры',icon:'🪂',cat:'elytra',mat:['']},
+  pickaxe:{name:'Кирка',icon:'⛏',cat:'pickaxe',mat:['wooden','stone','golden','iron','diamond','netherite']},
+  shovel:{name:'Лопата',icon:'🪣',cat:'shovel',mat:['wooden','stone','golden','iron','diamond','netherite']},
+  hoe:{name:'Мотыга',icon:'🌿',cat:'hoe',mat:['wooden','stone','golden','iron','diamond','netherite']},
+  fishing_rod:{name:'Удочка',icon:'🎣',cat:'fishing',mat:['']},
+  shears:{name:'Ножницы',icon:'✂',cat:'shears',mat:['']},
+  flint_and_steel:{name:'Огниво',icon:'🔥',cat:'flint',mat:['']}
+};
+
+const ENCHANTS={
+  unbreaking:{name:'Unbreaking',ru:'Прочность',max:3,cats:['weapon','weapon_axe','bow','crossbow','trident','armor_head','armor_chest','armor_legs','armor_feet','shield','elytra','pickaxe','shovel','hoe','fishing','flint','shears','mace'],conflicts:[]},
+  mending:{name:'Mending',ru:'Починка',max:1,cats:['weapon','weapon_axe','bow','crossbow','trident','armor_head','armor_chest','armor_legs','armor_feet','shield','elytra','pickaxe','shovel','hoe','fishing','flint','shears','mace'],conflicts:['infinity']},
+  curse_of_vanishing:{name:'Curse of Vanishing',ru:'Исчезновение',max:1,cats:['weapon','weapon_axe','bow','crossbow','trident','armor_head','armor_chest','armor_legs','armor_feet','shield','elytra','pickaxe','shovel','hoe','fishing','flint','shears','mace'],conflicts:[]},
+  sharpness:{name:'Sharpness',ru:'Острота',max:5,cats:['weapon','weapon_axe'],conflicts:['smite','bane_of_arthropods']},
+  smite:{name:'Smite',ru:'Небесная кара',max:5,cats:['weapon','weapon_axe'],conflicts:['sharpness','bane_of_arthropods']},
+  bane_of_arthropods:{name:'Bane of Arthropods',ru:'Погибель членистоногих',max:5,cats:['weapon','weapon_axe'],conflicts:['sharpness','smite']},
+  knockback:{name:'Knockback',ru:'Отдача',max:2,cats:['weapon'],conflicts:[]},
+  fire_aspect:{name:'Fire Aspect',ru:'Огненный аспект',max:2,cats:['weapon'],conflicts:[]},
+  looting:{name:'Looting',ru:'Добыча',max:3,cats:['weapon'],conflicts:[]},
+  sweeping_edge:{name:'Sweeping Edge',ru:'Круговой удар',max:3,cats:['weapon'],conflicts:[]},
+  efficiency:{name:'Efficiency',ru:'Эффективность',max:5,cats:['weapon_axe','pickaxe','shovel','hoe','shears'],conflicts:[]},
+  power:{name:'Power',ru:'Сила',max:5,cats:['bow'],conflicts:[]},
+  punch:{name:'Punch',ru:'Удар',max:2,cats:['bow'],conflicts:[]},
+  flame:{name:'Flame',ru:'Пламя',max:1,cats:['bow'],conflicts:[]},
+  infinity:{name:'Infinity',ru:'Бесконечность',max:1,cats:['bow'],conflicts:['mending']},
+  multishot:{name:'Multishot',ru:'Множественный выстрел',max:1,cats:['crossbow'],conflicts:['piercing']},
+  piercing:{name:'Piercing',ru:'Пробивание',max:4,cats:['crossbow'],conflicts:['multishot']},
+  quick_charge:{name:'Quick Charge',ru:'Быстрая зарядка',max:3,cats:['crossbow'],conflicts:[]},
+  loyalty:{name:'Loyalty',ru:'Верность',max:3,cats:['trident'],conflicts:['riptide']},
+  impaling:{name:'Impaling',ru:'Пронзание',max:5,cats:['trident'],conflicts:[]},
+  riptide:{name:'Riptide',ru:'Разрыв',max:3,cats:['trident'],conflicts:['loyalty','channeling']},
+  channeling:{name:'Channeling',ru:'Проводник',max:1,cats:['trident'],conflicts:['riptide']},
+  density:{name:'Density',ru:'Плотность',max:5,cats:['mace'],conflicts:['breach']},
+  breach:{name:'Breach',ru:'Пробой брони',max:4,cats:['mace'],conflicts:['density']},
+  wind_burst:{name:'Wind Burst',ru:'Порыв ветра',max:3,cats:['mace'],conflicts:[]},
+  protection:{name:'Protection',ru:'Защита',max:4,cats:['armor_head','armor_chest','armor_legs','armor_feet'],conflicts:['fire_protection','blast_protection','projectile_protection']},
+  fire_protection:{name:'Fire Protection',ru:'Огнезащита',max:4,cats:['armor_head','armor_chest','armor_legs','armor_feet'],conflicts:['protection','blast_protection','projectile_protection']},
+  blast_protection:{name:'Blast Protection',ru:'Взрывозащита',max:4,cats:['armor_head','armor_chest','armor_legs','armor_feet'],conflicts:['protection','fire_protection','projectile_protection']},
+  projectile_protection:{name:'Projectile Protection',ru:'Защита от стрел',max:4,cats:['armor_head','armor_chest','armor_legs','armor_feet'],conflicts:['protection','fire_protection','blast_protection']},
+  thorns:{name:'Thorns',ru:'Шипы',max:3,cats:['armor_head','armor_chest','armor_legs','armor_feet'],conflicts:[]},
+  curse_of_binding:{name:'Curse of Binding',ru:'Привязывание',max:1,cats:['armor_head','armor_chest','armor_legs','armor_feet'],conflicts:[]},
+  aqua_affinity:{name:'Aqua Affinity',ru:'Водное сродство',max:1,cats:['armor_head'],conflicts:[]},
+  respiration:{name:'Respiration',ru:'Дыхание',max:3,cats:['armor_head'],conflicts:[]},
+  feather_falling:{name:'Feather Falling',ru:'Мягкое падение',max:4,cats:['armor_feet'],conflicts:[]},
+  depth_strider:{name:'Depth Strider',ru:'Морской пешеход',max:3,cats:['armor_feet'],conflicts:['frost_walker']},
+  frost_walker:{name:'Frost Walker',ru:'Криоходец',max:2,cats:['armor_feet'],conflicts:['depth_strider']},
+  soul_speed:{name:'Soul Speed',ru:'Скорость душ',max:3,cats:['armor_feet'],conflicts:[]},
+  swift_sneak:{name:'Swift Sneak',ru:'Быстрая перебежка',max:3,cats:['armor_legs'],conflicts:[]},
+  fortune:{name:'Fortune',ru:'Удача',max:3,cats:['pickaxe','shovel','hoe','weapon_axe'],conflicts:['silk_touch']},
+  silk_touch:{name:'Silk Touch',ru:'Шёлковое касание',max:1,cats:['pickaxe','shovel','hoe','weapon_axe','shears'],conflicts:['fortune']},
+  luck_of_the_sea:{name:'Luck of the Sea',ru:'Морская удача',max:3,cats:['fishing'],conflicts:[]},
+  lure:{name:'Lure',ru:'Приманка',max:3,cats:['fishing'],conflicts:[]},
+};
+
+let currentItem='sword',currentCat='weapon',selectedEnch={};
+
+function pickItem(btn,id,name,icon,cat){
+  document.querySelectorAll('.ibtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentItem=id;currentCat=cat;selectedEnch={};
+  document.getElementById('esi-icon').textContent=icon;
+  document.getElementById('esi-name').textContent=name;
+  const ms=document.getElementById('mat-select');
+  const item=ITEMS[id];
+  const mats=item.mat.filter(m=>m!=='');
+  ms.style.display=mats.length?'block':'none';
+  ms.innerHTML='';
+  (mats.length?mats:['diamond']).forEach(m=>{
+    const o=document.createElement('option');
+    o.value=m;o.textContent={wooden:'Деревянный',stone:'Каменный',golden:'Золотой',iron:'Железный',diamond:'Алмазный',netherite:'Незеритовый',leather:'Кожаный',chainmail:'Кольчужный'}[m]||m;
+    if(m==='diamond')o.selected=true;ms.appendChild(o);
+  });
+  document.getElementById('esi-sub').textContent=getMCId()+' · выбери зачарования ниже';
+  renderEnchList();updateEnchOutput();
+}
+
+function getMCId(){
+  const ms=document.getElementById('mat-select');
+  const mat=ms.value||'diamond';
+  const noMat=['trident','bow','crossbow','fishing_rod','shears','flint_and_steel','shield','elytra','mace'];
+  if(noMat.includes(currentItem))return currentItem;
+  return mat+'_'+currentItem;
+}
+
+function renderEnchList(){
+  const list=document.getElementById('ench-list');
+  list.innerHTML='';
+  const applicable=Object.entries(ENCHANTS).filter(([k,e])=>e.cats.includes(currentCat));
+  if(!applicable.length){list.innerHTML='<div style="color:var(--text3);font-size:13px;padding:10px">Нет зачарований для этого предмета</div>';return;}
+  applicable.forEach(([key,e])=>{
+    const sel=selectedEnch[key];
+    const lvl=sel||1;
+    const isOn=!!sel;
+    const conflicted=isOn?false:e.conflicts.some(c=>selectedEnch[c]);
+    const row=document.createElement('div');
+    row.className='ench-row'+(isOn?' checked':'');
+    row.id='er-'+key;
+    row.innerHTML=`
+      <div class="er-check${isOn?' on':''}" id="chk-${key}" onclick="toggleEnch('${key}');playClick()"></div>
+      <div class="er-info">
+        <div class="er-name">${e.ru} <span style="font-size:10px;color:var(--text3);font-weight:400">${e.name}</span>${conflicted?'<span class="er-conflict"> · конфликт</span>':''}</div>
+        <div class="er-desc">Макс. уровень: ${e.max}${e.conflicts.length?' · конфликт: '+e.conflicts.map(c=>ENCHANTS[c]?.ru||c).join(', '):''}</div>
+      </div>
+      <div class="er-lvl">
+        <button class="lvl-btn" onclick="changeLvl('${key}',-1);playClick()">−</button>
+        <span class="lvl-num" id="lvl-${key}">${lvl}</span>
+        <button class="lvl-btn" onclick="changeLvl('${key}',1);playClick()">+</button>
+        <span class="lvl-max">/ ${e.max}</span>
+      </div>`;
+    if(conflicted)row.style.opacity='.45';
+    list.appendChild(row);
+  });
+  document.getElementById('ench-count-label').textContent='выбрано: '+Object.keys(selectedEnch).length;
+}
+
+function toggleEnch(key){
+  const e=ENCHANTS[key];
+  if(selectedEnch[key]){delete selectedEnch[key];}
+  else{
+    const conflicted=e.conflicts.some(c=>selectedEnch[c]);
+    if(conflicted)return;
+    selectedEnch[key]=1;
+  }
+  renderEnchList();updateEnchOutput();
+}
+function changeLvl(key,delta){
+  if(!selectedEnch[key])return;
+  const e=ENCHANTS[key];
+  selectedEnch[key]=Math.max(1,Math.min(e.max,selectedEnch[key]+delta));
+  document.getElementById('lvl-'+key).textContent=selectedEnch[key];
+  updateEnchOutput();
+}
+
+function toRoman(n){const r=['','I','II','III','IV','V'];return r[n]||n;}
+
+function updateEnchOutput(){
+  const ms=document.getElementById('mat-select');
+  const mcId=getMCId();
+  const customName=document.getElementById('ename-input').value.trim();
+  const count=Math.max(1,Math.min(64,parseInt(document.getElementById('ench-count').value)||1));
+  const keys=Object.keys(selectedEnch);
+
+  const tagsEl=document.getElementById('ench-tags');
+  tagsEl.innerHTML='';
+  keys.forEach(k=>{
+    const e=ENCHANTS[k];
+    const tag=document.createElement('div');tag.className='etag';
+    tag.innerHTML=`${e.ru} ${toRoman(selectedEnch[k])} <span class="etag-x" onclick="removeEnch('${k}')">✕</span>`;
+    tagsEl.appendChild(tag);
+  });
+
+  const box=document.getElementById('ench-cmd-box');
+  if(!keys.length&&!customName){box.innerHTML='<span class="no-ench-msg">Выбери зачарования выше...</span>';return;}
+
+  let cmd='';
+  if(version==='modern'){
+    if(keys.length){
+      cmd=`/give @s minecraft:${mcId}[enchantments={levels:{${keys.map(k=>`"minecraft:${k}":${selectedEnch[k]}`).join(',')}}}`+(customName?`,custom_name='{"text":"${customName}"}'`:'')+`] ${count}`;
+    } else {
+      cmd=`/give @s minecraft:${mcId}[custom_name='{"text":"${customName}"}'] ${count}`;
+    }
+  } else if(version==='pe'){
+    let enchStr=keys.map(k=>`{"id":"${k}","lvl":${selectedEnch[k]}}`).join(',');
+    let nameStr=customName?`"display":{"Name":"${customName}"},`:'';
+    let tag=nameStr+(keys.length?`"ench":[${enchStr}]`:'');
+    cmd=`/give @s ${mcId} ${count} 0 {${tag}}`;
+  } else {
+    let enchStr=keys.map(k=>`{id:${k},lvl:${selectedEnch[k]}s}`).join(',');
+    let nameStr=customName?`display:{Name:"${customName}"},`:'';
+    let tag=nameStr+(keys.length?`ench:[${enchStr}]`:'');
+    cmd=`/give @s ${mcId} ${count} 0 {${tag}}`;
+  }
+  box.textContent=cmd;
+}
+
+function removeEnch(key){delete selectedEnch[key];renderEnchList();updateEnchOutput();}
+function clearEnch(){selectedEnch={};renderEnchList();updateEnchOutput();document.getElementById('ename-input').value='';document.getElementById('ench-count').value=1;}
+function copyEnch(){
+  const t=document.getElementById('ench-cmd-box').textContent;
+  if(!t||t.includes('Выбери'))return;
+  navigator.clipboard.writeText(t).then(()=>{
+    playSuccess();
+    showToast('✨ Команда скопирована!');
+    const b=document.getElementById('copybtn-ench');
+    b.classList.add('flash');
+    setTimeout(()=>b.classList.remove('flash'),1800);
   });
 }
 
 /* ══ INIT ══ */
 setDir('north');setVersion('modern');
+pickItem(document.querySelector('.ibtn.active'),'sword','Меч','⚔','weapon');
+generate();
 </script>
 </body>
 </html>
