@@ -33,9 +33,26 @@ body.light{
 body.light .grid-bg{background-image:linear-gradient(rgba(0,136,68,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,136,68,0.06) 1px,transparent 1px)}
 body.light .outbox,.light .enchcmd-box{background:#e8f4ee;color:var(--green)}
 body.light #particles{opacity:0.3}
-body.light .topnav{background:rgba(240,244,248,0.95);border-color:rgba(0,136,68,0.15)}
+body.light .topnav{background:rgba(255,255,255,0.97);border-color:rgba(0,136,68,0.18);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
 body.light .card{box-shadow:0 2px 16px rgba(0,0,0,0.06)}
 body.light .toast{background:var(--green);color:#fff}
+/* Nav tabs — readable on light bg */
+body.light .ntab{color:#4a6a85}
+body.light .ntab:hover{color:#1e3448}
+body.light .ntab.active{color:#008844;border-bottom-color:#008844}
+body.light #ntab-secret.active{color:#dc2626!important;border-bottom-color:#dc2626!important}
+/* Version pill on light */
+body.light .version-pill{background:#dce6f0;border-color:#b0c8e0}
+body.light .vpill{color:#4a6a85}
+body.light .vpill.am{color:#7c3aed;background:rgba(124,58,237,0.12)}
+body.light .vpill.al{color:#ca8a04;background:rgba(202,138,4,0.12)}
+body.light .vpill.ape{color:#ea580c;background:rgba(234,88,12,0.12)}
+/* Theme btn on light */
+body.light .theme-btn{background:#dce6f0;border-color:#b0c8e0;color:#4a6a85}
+/* Nav logo on light */
+body.light .nav-logo span{color:#008844;text-shadow:none}
+/* Mobile version pill on light */
+body.light .version-pill-mobile{background:#dce6f0;border-color:#b0c8e0}
 
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size:16px;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
@@ -1040,15 +1057,15 @@ function switchPage(p){
   ['fill','quick','ench','secret'].forEach(x=>{
     const pg=document.getElementById('page-'+x);
     const tb=document.getElementById('ntab-'+x);
-    if(pg)pg.className='page'+(x===p?' active':'');
-    if(tb)tb.className='ntab'+(x==='secret'?tb.className.includes('visible')?' ntab visible':' ntab':'ntab')+(x===p?' active':'');
+    if(pg) pg.className='page'+(x===p?' active':'');
+    if(!tb) return;
+    if(x==='secret'){
+      const vis=tb.classList.contains('visible');
+      tb.className='ntab'+(vis?' visible':'')+(x===p?' active':'');
+    } else {
+      tb.className='ntab'+(x===p?' active':'');
+    }
   });
-  // fix secret tab class properly
-  const st=document.getElementById('ntab-secret');
-  if(st){
-    const vis=st.classList.contains('visible');
-    st.className='ntab'+(vis?' visible':'')+(p==='secret'?' active':'');
-  }
 }
 
 /* ══ VERSION ══ */
