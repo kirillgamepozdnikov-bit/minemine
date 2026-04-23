@@ -306,6 +306,147 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
+/* ══ SECRET ENTRY BUTTON ══ */
+.secret-entry-btn{
+  display:block;width:100%;background:none;border:none;
+  font-family:var(--font-code);font-size:10px;color:#2a3f52;
+  letter-spacing:.06em;cursor:pointer;padding:8px 0 4px;
+  text-align:left;transition:color .3s;user-select:none;
+}
+.secret-entry-btn:hover{color:#3d5a70}
+
+/* ══ SECRET MODAL OVERLAY ══ */
+.sec-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .35s}
+.sec-overlay.open{opacity:1;pointer-events:all}
+.sec-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;
+  padding:28px 28px 24px;width:min(420px,92vw);position:relative;
+  animation:secPop .35s cubic-bezier(0.175,0.885,0.32,1.275) both}
+@keyframes secPop{from{transform:scale(0.88) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.sec-modal-title{font-family:var(--font-code);font-size:11px;color:var(--text3);
+  letter-spacing:.1em;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.sec-modal-title span{color:var(--text2)}
+.sec-input-row{display:flex;gap:8px;margin-bottom:12px}
+.sec-input{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
+  padding:10px 14px;color:var(--text);font-family:var(--font-code);font-size:14px;
+  flex:1;outline:none;transition:border-color .2s;letter-spacing:.08em}
+.sec-input:focus{border-color:var(--text3)}
+.sec-submit{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);
+  border-radius:8px;padding:10px 18px;font-size:12px;font-weight:700;
+  font-family:var(--font-ui);letter-spacing:.08em;cursor:pointer;transition:all .2s;
+  text-transform:uppercase;white-space:nowrap}
+.sec-submit:hover{border-color:var(--text);color:var(--text)}
+.sec-status{font-family:var(--font-code);font-size:11px;min-height:18px;letter-spacing:.05em;margin-bottom:4px}
+.sec-status.err{color:#c0392b}
+.sec-status.ok{color:var(--green)}
+.sec-close{position:absolute;top:14px;right:16px;background:none;border:none;
+  color:var(--text3);font-size:18px;cursor:pointer;transition:color .2s;line-height:1}
+.sec-close:hover{color:var(--text)}
+
+/* Fake ban screen */
+.fakeban{position:fixed;inset:0;z-index:9998;background:#0a0005;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;opacity:0;pointer-events:none;transition:opacity .2s}
+.fakeban.show{opacity:1;pointer-events:all}
+.fakeban-title{font-family:var(--font-mc);font-size:16px;color:#ff3333;
+  text-shadow:0 0 30px rgba(255,0,0,0.8);text-align:center;line-height:1.8;
+  animation:banFlicker 1.5s ease-in-out infinite alternate}
+@keyframes banFlicker{0%{opacity:1}85%{opacity:1}90%{opacity:.6}95%{opacity:1}100%{opacity:.85}}
+.fakeban-sub{font-family:var(--font-code);font-size:12px;color:#cc2222;
+  text-align:center;letter-spacing:.08em;line-height:1.8}
+.fakeban-ip{font-family:var(--font-code);font-size:11px;color:#882222;
+  background:rgba(255,0,0,0.05);border:1px solid rgba(255,0,0,0.12);
+  border-radius:6px;padding:8px 16px;letter-spacing:.1em}
+.fakeban-hint{font-family:var(--font-code);font-size:9px;color:#441111;
+  text-transform:uppercase;letter-spacing:.2em;margin-top:20px;
+  animation:blink 1.2s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ══ SECRET SECTION PAGE ══ */
+#page-secret{display:none}
+#page-secret.active{display:block;animation:fadeUp .5s ease both}
+
+/* Nav tab hidden initially */
+#ntab-secret{display:none}
+#ntab-secret.visible{display:flex}
+#ntab-secret.active{color:#f87171!important;border-bottom-color:#f87171!important}
+@keyframes revealPulse{0%{text-shadow:none}50%{text-shadow:0 0 16px rgba(248,113,113,0.7)}100%{text-shadow:none}}
+#ntab-secret.visible{animation:revealPulse 2s ease-in-out 3}
+
+/* Secret section styles */
+.sec-section-title{font-family:var(--font-mc);font-size:9px;color:#f87171;
+  text-shadow:0 0 16px rgba(248,113,113,0.5);letter-spacing:.12em;
+  margin-bottom:6px;line-height:1.8}
+.card.secret-card::before{background:linear-gradient(90deg,transparent,rgba(248,113,113,0.25),transparent)}
+.card.secret-card{border-color:rgba(248,113,113,0.12)}
+.card.secret-card:hover{border-color:rgba(248,113,113,0.2)}
+
+/* ══ MOB GENERATOR ══ */
+.mob-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:500px){.mob-grid{grid-template-columns:repeat(3,1fr)}}
+.mbtn{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
+  padding:8px 4px;cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:var(--text2);font-family:var(--font-ui);font-size:9px;font-weight:700;
+  letter-spacing:.04em;user-select:none;text-align:center;min-height:58px;justify-content:center}
+.mbtn .mi{font-size:20px;line-height:1}
+.mbtn:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-1px)}
+.mbtn.active{border-color:var(--orange);color:var(--orange);background:rgba(251,146,60,0.08);
+  box-shadow:0 0 14px rgba(251,146,60,0.18)}
+
+.mob-config{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:480px){.mob-config{grid-template-columns:1fr}}
+.mob-config-box label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  color:var(--text2);margin-bottom:6px;text-transform:uppercase}
+.mob-sel{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
+  padding:8px 12px;color:var(--text);font-family:var(--font-code);font-size:12px;
+  width:100%;outline:none;transition:border-color .2s;cursor:pointer}
+.mob-sel:focus{border-color:var(--orange)}
+
+.mob-effect-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.mob-eff-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;
+  padding:5px 10px;font-size:10px;font-weight:700;color:var(--text2);cursor:pointer;
+  transition:all .15s;font-family:var(--font-ui);letter-spacing:.06em;user-select:none}
+.mob-eff-btn:hover{color:var(--purple);border-color:var(--purple)}
+.mob-eff-btn.active{background:rgba(167,139,250,0.1);border-color:var(--purple);color:var(--purple)}
+
+/* ══ DESTRUCTION MASTER ══ */
+.dm-dir-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px}
+.dm-dir-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
+  padding:6px 4px;cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:var(--text2);font-family:var(--font-ui);font-size:9px;font-weight:700;
+  letter-spacing:.05em;user-select:none;min-height:52px;justify-content:center}
+.dm-dir-btn .ddi{font-size:16px;line-height:1}
+.dm-dir-btn:hover{border-color:var(--red);color:var(--red);transform:translateY(-1px)}
+.dm-dir-btn.active{background:rgba(248,113,113,0.08);border-color:var(--red);color:var(--red);
+  box-shadow:0 0 14px rgba(248,113,113,0.2)}
+.dm-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+@media(max-width:480px){.dm-grid{grid-template-columns:1fr 1fr}}
+.dm-box label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;
+  color:var(--text2);margin-bottom:5px;text-transform:uppercase}
+.dm-input{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
+  padding:9px 12px;color:var(--text);font-family:var(--font-code);font-size:13px;
+  font-weight:600;width:100%;outline:none;transition:border-color .2s;-moz-appearance:textfield}
+.dm-input::-webkit-inner-spin-button,.dm-input::-webkit-outer-spin-button{-webkit-appearance:none}
+.dm-input:focus{border-color:var(--red)}
+.dm-block-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.dm-bbtn{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
+  padding:8px 4px;cursor:pointer;transition:all .15s;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:var(--text2);font-family:var(--font-ui);font-size:9px;font-weight:700;
+  user-select:none;text-align:center;min-height:52px;justify-content:center}
+.dm-bbtn .dbi{font-size:18px}
+.dm-bbtn:hover{border-color:var(--red);color:var(--red)}
+.dm-bbtn.active{border-color:var(--red);color:var(--red);background:rgba(248,113,113,0.06)}
+.dm-out{background:#03060a;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;font-family:var(--font-code);font-size:12px;color:#f87171;
+  min-height:80px;word-break:break-all;line-height:1.8;white-space:pre-wrap;
+  text-shadow:0 0 10px rgba(248,113,113,0.25);margin-bottom:12px;position:relative}
+.dm-counter{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text3);margin-bottom:10px}
+.dm-counter strong{color:var(--red);font-family:var(--font-code)}
+
 /* ══ PULSE ANIMATION ON ACTIVE NAV ══ */
 @keyframes navPulse{0%,100%{text-shadow:0 0 8px rgba(0,255,136,0.4)}50%{text-shadow:0 0 20px rgba(0,255,136,0.8)}}
 .ntab.active{animation:navPulse 3s ease-in-out infinite}
@@ -314,108 +455,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 .page-hero{text-align:center;padding:24px 0 8px;margin-bottom:8px}
 .page-hero h1{font-family:var(--font-mc);font-size:10px;color:var(--green);text-shadow:0 0 20px rgba(0,255,136,0.5);letter-spacing:.1em;line-height:2}
 .page-hero p{font-size:13px;color:var(--text3);margin-top:8px}
-
-/* ══ ENCHANTMENT CMD APPEAR ANIMATION ══ */
-@keyframes cmdAppear{
-  0%{opacity:0;transform:translateY(6px) scale(0.98);text-shadow:0 0 30px rgba(0,255,136,0.9)}
-  60%{opacity:1;transform:translateY(-1px) scale(1.004)}
-  100%{opacity:1;transform:translateY(0) scale(1);text-shadow:0 0 10px rgba(0,255,136,0.25)}
-}
-.cmd-appear{animation:cmdAppear .5s cubic-bezier(0.16,1,0.3,1) both}
-
-/* ══ ENCHANTED GLOW on enchcmd-box when has content ══ */
-.enchcmd-box.has-cmd{
-  border-color:rgba(0,255,136,0.3);
-  box-shadow:0 0 28px rgba(0,255,136,0.1),inset 0 0 20px rgba(0,255,136,0.03);
-  animation:enchBoxPulse 3s ease-in-out infinite alternate;
-}
-@keyframes enchBoxPulse{
-  0%{box-shadow:0 0 20px rgba(0,255,136,0.08),inset 0 0 12px rgba(0,255,136,0.02)}
-  100%{box-shadow:0 0 36px rgba(0,255,136,0.18),inset 0 0 24px rgba(0,255,136,0.06)}
-}
-
-/* ══ PARTICLE BURST on copy ══ */
-@keyframes burstPop{0%{transform:scale(0) translateY(0);opacity:1}100%{transform:scale(1.5) translateY(-40px);opacity:0}}
-.copy-burst{position:fixed;pointer-events:none;font-size:18px;z-index:9999;animation:burstPop .7s ease-out forwards}
-
-/* ══ FLOATING ENCHANT SPARKLES ══ */
-@keyframes sparkleFloat{
-  0%{transform:translateY(0) scale(1);opacity:0.8}
-  50%{opacity:1}
-  100%{transform:translateY(-60px) scale(0);opacity:0}
-}
-.ench-sparkle{position:absolute;pointer-events:none;font-size:12px;animation:sparkleFloat 1.2s ease-out forwards;z-index:20}
-
-/* ══ CARD ENTRANCE STAGGER ══ */
-.card:nth-child(1){animation-delay:.0s}
-.card:nth-child(2){animation-delay:.07s}
-.card:nth-child(3){animation-delay:.14s}
-.card:nth-child(4){animation-delay:.21s}
-
-/* ══ SCANNING LINE ON OUTBOX ══ */
-.outbox{position:relative;overflow:hidden}
-.outbox::after{
-  content:'';position:absolute;top:-100%;left:0;right:0;height:40%;
-  background:linear-gradient(transparent,rgba(0,255,136,0.04),transparent);
-  animation:scanLine 4s ease-in-out infinite;pointer-events:none;
-}
-@keyframes scanLine{0%,100%{top:-100%}50%{top:200%}}
-
-/* ══ IBTN HOVER GLOW ══ */
-.ibtn:hover .ii{
-  filter:drop-shadow(0 0 8px rgba(251,191,36,0.7));
-  animation:iconWobble .3s ease-in-out;
-}
-@keyframes iconWobble{0%{transform:scale(1)}40%{transform:scale(1.25) rotate(-8deg)}70%{transform:scale(0.95) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
-
-/* ══ ACTIVE ENCH ROW SHINE ══ */
-.ench-row.checked{
-  background:linear-gradient(135deg,rgba(167,139,250,0.07),rgba(167,139,250,0.02));
-  border-color:rgba(167,139,250,0.45);
-  box-shadow:0 2px 16px rgba(167,139,250,0.1);
-}
-
-/* ══ ETAG ENTRANCE ══ */
-@keyframes tagPop{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
-.etag{animation:tagPop .25s cubic-bezier(0.175,0.885,0.32,1.275) both}
-
-/* ══ LEVEL NUM BOUNCE ══ */
-@keyframes lvlBounce{0%{transform:scale(1)}40%{transform:scale(1.5) translateY(-2px);color:var(--yellow)}100%{transform:scale(1)}}
-.lvl-bounce{animation:lvlBounce .25s ease both}
-
-/* ══ VERSION BADGE GLOW ══ */
-.vpill.am,.vpill.al,.vpill.ape{position:relative;overflow:hidden}
-.vpill.am::after,.vpill.al::after,.vpill.ape::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.18) 50%,transparent 100%);
-  transform:translateX(-100%);animation:vpillShine 3s ease-in-out infinite;
-}
-@keyframes vpillShine{0%,70%{transform:translateX(-100%)}80%,100%{transform:translateX(200%)}}
-
-/* ══ FLOATING ORB DECORATIONS ══ */
-.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(60px);animation:orbFloat 8s ease-in-out infinite alternate}
-.orb-1{width:300px;height:300px;background:rgba(0,255,136,0.035);top:10%;right:-80px;animation-duration:9s}
-.orb-2{width:250px;height:250px;background:rgba(56,189,248,0.03);bottom:15%;left:-60px;animation-duration:11s;animation-direction:alternate-reverse}
-.orb-3{width:200px;height:200px;background:rgba(167,139,250,0.025);top:50%;right:15%;animation-duration:7s}
-@keyframes orbFloat{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-30px) scale(1.08)}}
-
-/* ══ ENCHANTMENT VERSION BADGE ══ */
-.ench-version-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:#c4b5fd;letter-spacing:.08em;margin-bottom:10px;animation:badgePulse 2s ease-in-out infinite alternate}
-@keyframes badgePulse{0%{box-shadow:0 0 0px rgba(167,139,250,0)}100%{box-shadow:0 0 12px rgba(167,139,250,0.3)}}
-
-/* ══ COPY SUCCESS FLASH RING ══ */
-@keyframes ringOut{0%{transform:scale(1);opacity:.8;box-shadow:0 0 0 0 rgba(0,255,136,0.5)}100%{transform:scale(1.03);opacity:0;box-shadow:0 0 0 20px rgba(0,255,136,0)}}
-.copybtn.flash{animation:ringOut .6s ease-out,none}
-
-/* ══ GLITCH EFFECT ON LOGO HOVER ══ */
-.nav-logo:hover span{animation:glitch .4s steps(2) both}
-@keyframes glitch{
-  0%{text-shadow:0 0 14px rgba(0,255,136,0.5)}
-  25%{text-shadow:-2px 0 8px rgba(56,189,248,0.8),2px 0 8px rgba(248,113,113,0.8)}
-  50%{text-shadow:2px 0 8px rgba(167,139,250,0.8),-2px 0 8px rgba(0,255,136,0.8)}
-  75%{text-shadow:-1px 0 12px rgba(0,255,136,0.6)}
-  100%{text-shadow:0 0 14px rgba(0,255,136,0.5)}
-}
 </style>
 </head>
 <body>
@@ -423,9 +462,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 <div class="grid-bg"></div>
 <div class="ambient"></div>
 <canvas id="particles"></canvas>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
 
 <!-- ══ TOP NAV ══ -->
 <nav class="topnav">
@@ -438,6 +474,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
       <button class="ntab active" id="ntab-fill" onclick="switchPage('fill');playClick()"><span class="ntab-icon">⛏</span>Fill &amp; Tunnel</button>
       <button class="ntab" id="ntab-quick" onclick="switchPage('quick');playClick()"><span class="ntab-icon">⚡</span>Quick Commands</button>
       <button class="ntab" id="ntab-ench" onclick="switchPage('ench');playClick()"><span class="ntab-icon">✦</span>Enchantments</button>
+      <button class="ntab" id="ntab-secret" onclick="switchPage('secret');playClick()"><span class="ntab-icon">⚠</span>Special</button>
     </div>
     <div class="nav-right">
       <button class="theme-btn" id="theme-toggle" onclick="toggleTheme();playClick()" title="Тёмная / Светлая тема">🌙</button>
@@ -730,7 +767,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
       <!-- output -->
       <div class="ench-out-box">
         <div class="ctitle"><em>◈</em> Команда /give</div>
-        <div id="ench-version-badge" class="ench-version-badge">✦ 1.18+ · Java Edition</div>
         <div class="ename-row">
           <input class="ename-input" id="ename-input" placeholder="Кастомное имя (опционально)..." oninput="updateEnchOutput()">
           <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
@@ -753,6 +789,162 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
   </div>
 </div><!-- /page-ench -->
 
+<!-- ══════════════ PAGE: SECRET ══════════════ -->
+<div class="page" id="page-secret">
+
+  <!-- MOB GENERATOR -->
+  <div class="card secret-card" style="animation-delay:.05s">
+    <div class="sec-section-title">MOB GENERATOR</div>
+    <div class="ctitle"><em>🐉</em> Выбери моба</div>
+    <div class="mob-grid">
+      <button class="mbtn active" id="mob-zombie" onclick="selectMob(this,'zombie')"><span class="mi">🧟</span><span>Zombie</span></button>
+      <button class="mbtn" id="mob-skeleton" onclick="selectMob(this,'skeleton')"><span class="mi">💀</span><span>Skeleton</span></button>
+      <button class="mbtn" id="mob-creeper" onclick="selectMob(this,'creeper')"><span class="mi">💚</span><span>Creeper</span></button>
+      <button class="mbtn" id="mob-spider" onclick="selectMob(this,'spider')"><span class="mi">🕷</span><span>Spider</span></button>
+      <button class="mbtn" id="mob-enderman" onclick="selectMob(this,'enderman')"><span class="mi">🖤</span><span>Enderman</span></button>
+      <button class="mbtn" id="mob-witch" onclick="selectMob(this,'witch')"><span class="mi">🧙</span><span>Witch</span></button>
+      <button class="mbtn" id="mob-blaze" onclick="selectMob(this,'blaze')"><span class="mi">🔥</span><span>Blaze</span></button>
+      <button class="mbtn" id="mob-wither_skeleton" onclick="selectMob(this,'wither_skeleton')"><span class="mi">☠</span><span>W.Skel</span></button>
+      <button class="mbtn" id="mob-piglin_brute" onclick="selectMob(this,'piglin_brute')"><span class="mi">🐷</span><span>Piglin</span></button>
+      <button class="mbtn" id="mob-elder_guardian" onclick="selectMob(this,'elder_guardian')"><span class="mi">🐟</span><span>E.Guard</span></button>
+      <button class="mbtn" id="mob-evoker" onclick="selectMob(this,'evoker')"><span class="mi">👁</span><span>Evoker</span></button>
+      <button class="mbtn" id="mob-warden" onclick="selectMob(this,'warden')"><span class="mi">🫧</span><span>Warden</span></button>
+    </div>
+
+    <div class="mob-config">
+      <div class="mob-config-box">
+        <label>Количество</label>
+        <input class="dm-input" type="number" id="mob-count" value="1" min="1" max="50" oninput="updateMobCmd()">
+      </div>
+      <div class="mob-config-box">
+        <label>Имя (опционально)</label>
+        <input class="cinput" id="mob-name" placeholder="Напр: §cBoss" oninput="updateMobCmd()" style="font-size:12px;padding:8px 12px">
+      </div>
+      <div class="mob-config-box">
+        <label>Броня (шлем)</label>
+        <select class="mob-sel" id="mob-helm" onchange="updateMobCmd()">
+          <option value="">Нет</option>
+          <option value="leather_helmet">Кожаный</option>
+          <option value="golden_helmet">Золотой</option>
+          <option value="iron_helmet">Железный</option>
+          <option value="diamond_helmet">Алмазный</option>
+          <option value="netherite_helmet">Незерит</option>
+        </select>
+      </div>
+      <div class="mob-config-box">
+        <label>Оружие (рука)</label>
+        <select class="mob-sel" id="mob-weapon" onchange="updateMobCmd()">
+          <option value="">Нет</option>
+          <option value="wooden_sword">Деревянный меч</option>
+          <option value="iron_sword">Железный меч</option>
+          <option value="diamond_sword">Алмазный меч</option>
+          <option value="bow">Лук</option>
+          <option value="crossbow">Арбалет</option>
+          <option value="trident">Трезубец</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ctitle" style="margin-bottom:10px"><em>✦</em> Эффекты на моба</div>
+    <div class="mob-effect-grid" id="mob-effect-grid">
+      <button class="mob-eff-btn" onclick="toggleMobEff(this,'speed')">Speed</button>
+      <button class="mob-eff-btn" onclick="toggleMobEff(this,'strength')">Strength</button>
+      <button class="mob-eff-btn" onclick="toggleMobEff(this,'fire_resistance')">Fire Res.</button>
+      <button class="mob-eff-btn" onclick="toggleMobEff(this,'resistance')">Resistance</button>
+      <button class="mob-eff-btn" onclick="toggleMobEff(this,'invisibility')">Invisible</button>
+      <button class="mob-eff-btn" onclick="toggleMobEff(this,'regeneration')">Regen</button>
+    </div>
+
+    <div class="outbox" id="mob-cmd-out" style="color:var(--orange);text-shadow:0 0 12px rgba(251,146,60,0.3);font-size:12px"><span class="olabel">COMMAND</span>/summon zombie ~ ~ ~</div>
+    <button class="copybtn" style="border-color:var(--orange);color:var(--orange);background:rgba(251,146,60,0.06)" onclick="copyMobCmd();addRipple(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy /summon
+    </button>
+  </div>
+
+  <!-- DESTRUCTION MASTER -->
+  <div class="card secret-card" style="animation-delay:.1s">
+    <div class="sec-section-title">DESTRUCTION MASTER</div>
+    <div class="ctitle"><em>💥</em> Послойное удаление — авто-смещение через Scoreboard</div>
+
+    <div class="ctitle" style="margin-bottom:10px"><em>◈</em> Направление смещения</div>
+    <div class="dm-dir-grid">
+      <button class="dm-dir-btn" id="dmd-nw" onclick="setDmDir('nw');playClick()"><span class="ddi">↖</span><span>NW</span></button>
+      <button class="dm-dir-btn active" id="dmd-north" onclick="setDmDir('north');playClick()"><span class="ddi">▲</span><span>NORTH</span></button>
+      <button class="dm-dir-btn" id="dmd-ne" onclick="setDmDir('ne');playClick()"><span class="ddi">↗</span><span>NE</span></button>
+      <button class="dm-dir-btn" id="dmd-up" onclick="setDmDir('up');playClick()"><span class="ddi">⬆</span><span>UP</span></button>
+      <div style="background:var(--bg3);border:1px dashed #182535;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text3);font-weight:700;letter-spacing:.1em">ORIGIN</div>
+      <button class="dm-dir-btn" id="dmd-west" onclick="setDmDir('west');playClick()"><span class="ddi">◀</span><span>WEST</span></button>
+      <div style="background:var(--bg3);border:1px dashed rgba(248,113,113,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px">💥</div>
+      <button class="dm-dir-btn" id="dmd-east" onclick="setDmDir('east');playClick()"><span class="ddi">▶</span><span>EAST</span></button>
+      <button class="dm-dir-btn" id="dmd-down" onclick="setDmDir('down');playClick()"><span class="ddi">⬇</span><span>DOWN</span></button>
+      <div></div>
+      <div></div>
+      <button class="dm-dir-btn" id="dmd-south" onclick="setDmDir('south');playClick()"><span class="ddi">▼</span><span>SOUTH</span></button>
+      <div></div><div></div><div></div>
+    </div>
+
+    <div class="ctitle" style="margin-bottom:10px"><em>◈</em> Координаты и размеры области</div>
+    <div class="dm-grid">
+      <div class="dm-box"><label>X (начало)</label><input class="dm-input" type="number" id="dm-x" value="0" oninput="generateDM()"></div>
+      <div class="dm-box"><label>Y (начало)</label><input class="dm-input" type="number" id="dm-y" value="64" oninput="generateDM()"></div>
+      <div class="dm-box"><label>Z (начало)</label><input class="dm-input" type="number" id="dm-z" value="0" oninput="generateDM()"></div>
+      <div class="dm-box"><label>Ширина (X)</label><input class="dm-input" type="number" id="dm-sx" value="10" min="1" oninput="generateDM()"></div>
+      <div class="dm-box"><label>Высота (Y)</label><input class="dm-input" type="number" id="dm-sy" value="10" min="1" oninput="generateDM()"></div>
+      <div class="dm-box"><label>Глубина (Z)</label><input class="dm-input" type="number" id="dm-sz" value="10" min="1" oninput="generateDM()"></div>
+      <div class="dm-box"><label>Слоёв всего</label><input class="dm-input" type="number" id="dm-layers" value="5" min="1" max="100" oninput="generateDM()"></div>
+      <div class="dm-box"><label>Интервал (сек)</label><input class="dm-input" type="number" id="dm-interval" value="2" min="1" max="60" oninput="generateDM()"></div>
+    </div>
+
+    <div class="ctitle" style="margin-bottom:10px"><em>◈</em> Блок заполнения</div>
+    <div class="dm-block-grid">
+      <button class="dm-bbtn active" id="dmb-air" onclick="setDmBlock(this,'air');playClick()"><span class="dbi">🌫️</span><span>Air</span></button>
+      <button class="dm-bbtn" id="dmb-lava" onclick="setDmBlock(this,'lava');playClick()"><span class="dbi">🔥</span><span>Lava</span></button>
+      <button class="dm-bbtn" id="dmb-tnt" onclick="setDmBlock(this,'tnt');playClick()"><span class="dbi">💣</span><span>TNT</span></button>
+      <button class="dm-bbtn" id="dmb-water" onclick="setDmBlock(this,'water');playClick()"><span class="dbi">🌊</span><span>Water</span></button>
+    </div>
+    <div class="crow" style="margin-bottom:12px">
+      <span style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em;white-space:nowrap">CUSTOM:</span>
+      <input class="cinput" id="dm-custom-block" placeholder="свой ID блока..." oninput="onDmCustomBlock(this)" style="font-size:12px;padding:8px 12px">
+    </div>
+
+    <div class="dm-counter">Будет сгенерировано: <strong id="dm-layer-count">5</strong> команд · таймер: <strong id="dm-timer-val">2с</strong>/слой</div>
+    <div class="dm-out" id="dm-out">— нажми любую кнопку выше —</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button class="copybtn" style="border-color:var(--red);color:var(--red);background:rgba(248,113,113,0.06)" onclick="copyDM();addRipple(this)" id="copybtn-dm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy All Commands
+      </button>
+      <div style="font-size:11px;color:var(--text3)">Вставляй команды поочерёдно в командные блоки типа <strong style="color:var(--text2)">Chain</strong></div>
+    </div>
+  </div>
+
+</div><!-- /page-secret -->
+
+<!-- SECRET MODAL -->
+<div class="sec-overlay" id="sec-overlay" onclick="checkOverlayClose(event)">
+  <div class="sec-modal" id="sec-modal">
+    <button class="sec-close" onclick="closeSecModal()">✕</button>
+    <div class="sec-modal-title">sys/auth · <span>cloud_admin_module v2.1</span></div>
+    <div class="sec-input-row">
+      <input class="sec-input" type="password" id="sec-pass" placeholder="access code" maxlength="20" onkeydown="if(event.key==='Enter')checkSecPass()">
+      <button class="sec-submit" onclick="checkSecPass()">AUTH</button>
+    </div>
+    <div class="sec-status" id="sec-status"></div>
+  </div>
+</div>
+
+<!-- FAKE BAN SCREEN -->
+<div class="fakeban" id="fakeban">
+  <div class="fakeban-title">YOU HAVE BEEN BANNED</div>
+  <div class="fakeban-sub">
+    Reason: Unauthorized access attempt<br>
+    Appeal: never
+  </div>
+  <div class="fakeban-ip" id="fakeban-ip">IP: 192.168.0.1 · locked</div>
+  <div class="fakeban-hint">Press F5 to reload</div>
+</div>
+
 <!-- FOOTER -->
 <div class="footer">
   <a class="ig-link" href="https://www.instagram.com/specter_xpath?igsh=MTdjMml6eWZ2MWJtYQ==" target="_blank" rel="noopener">
@@ -760,6 +952,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
     <div class="ig-info"><span class="ig-handle">@specter_xpath</span><span class="ig-sub">INSTAGRAM · ПОДПИСЫВАЙСЯ</span></div>
     <svg style="margin-left:6px;opacity:.35" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
   </a>
+  <button class="secret-entry-btn" onclick="openSecModal()">cloud administrator code</button>
   <div class="footer-copy">MC Commander · specter_xpath · 2025</div>
 </div>
 
@@ -844,10 +1037,18 @@ function toggleTheme(){
 
 /* ══ PAGES ══ */
 function switchPage(p){
-  ['fill','quick','ench'].forEach(x=>{
-    document.getElementById('page-'+x).className='page'+(x===p?' active':'');
-    document.getElementById('ntab-'+x).className='ntab'+(x===p?' active':'');
+  ['fill','quick','ench','secret'].forEach(x=>{
+    const pg=document.getElementById('page-'+x);
+    const tb=document.getElementById('ntab-'+x);
+    if(pg)pg.className='page'+(x===p?' active':'');
+    if(tb)tb.className='ntab'+(x==='secret'?tb.className.includes('visible')?' ntab visible':' ntab':'ntab')+(x===p?' active':'');
   });
+  // fix secret tab class properly
+  const st=document.getElementById('ntab-secret');
+  if(st){
+    const vis=st.classList.contains('visible');
+    st.className='ntab'+(vis?' visible':'')+(p==='secret'?' active':'');
+  }
 }
 
 /* ══ VERSION ══ */
@@ -877,13 +1078,6 @@ function setVersion(v){
   if(cbCmd){
     if(v==='pe')cbCmd.textContent='/give @s command_block 1';
     else cbCmd.textContent='/give @s command_block';
-  }
-  // Update enchantment version badge
-  const badge=document.getElementById('ench-version-badge');
-  if(badge){
-    if(v==='modern') badge.innerHTML='✦ 1.18+ · Java Edition · NBT формат';
-    else if(v==='pe') badge.innerHTML='📱 Bedrock / PE Edition · ench формат';
-    else badge.innerHTML='⚙ Legacy 1.8 · числовые ID зачарований';
   }
   generate();updateEnchOutput();
 }
@@ -1061,7 +1255,7 @@ function pickItem(btn,id,name,icon,cat){
   document.getElementById('esi-name').textContent=name;
   const ms=document.getElementById('mat-select');
   const item=ITEMS[id];
-  const mats=item.mat.filter(m=>m!=='');
+  const mats=getMatList(id);
   ms.style.display=mats.length?'block':'none';
   ms.innerHTML='';
   (mats.length?mats:['diamond']).forEach(m=>{
@@ -1079,6 +1273,13 @@ function getMCId(){
   const noMat=['trident','bow','crossbow','fishing_rod','shears','flint_and_steel','shield','elytra','mace'];
   if(noMat.includes(currentItem))return currentItem;
   return mat+'_'+currentItem;
+}
+
+// Netherite is not available in Legacy 1.16-
+function getMatList(item){
+  const all=ITEMS[item].mat.filter(m=>m!=='');
+  if(version==='legacy') return all.filter(m=>m!=='netherite');
+  return all;
 }
 
 function renderEnchList(){
@@ -1119,14 +1320,6 @@ function toggleEnch(key){
     const conflicted=e.conflicts.some(c=>selectedEnch[c]);
     if(conflicted)return;
     selectedEnch[key]=1;
-    /* mini sparkle on check */
-    const chk=document.getElementById('chk-'+key);
-    if(chk){
-      const r=chk.getBoundingClientRect();
-      const sp=document.createElement('div');sp.className='ench-sparkle';
-      sp.textContent='✦';sp.style.left=(r.left-4)+'px';sp.style.top=(r.top+window.scrollY)+'px';
-      document.body.appendChild(sp);setTimeout(()=>sp.remove(),1300);
-    }
   }
   renderEnchList();updateEnchOutput();
 }
@@ -1134,26 +1327,11 @@ function changeLvl(key,delta){
   if(!selectedEnch[key])return;
   const e=ENCHANTS[key];
   selectedEnch[key]=Math.max(1,Math.min(e.max,selectedEnch[key]+delta));
-  const el=document.getElementById('lvl-'+key);
-  el.textContent=selectedEnch[key];
-  el.classList.remove('lvl-bounce');void el.offsetWidth;el.classList.add('lvl-bounce');
+  document.getElementById('lvl-'+key).textContent=selectedEnch[key];
   updateEnchOutput();
 }
 
 function toRoman(n){const r=['','I','II','III','IV','V'];return r[n]||n;}
-
-/* Числовые ID зачарований для Legacy (1.8) */
-const ENCH_IDS={
-  protection:0,fire_protection:1,feather_falling:2,blast_protection:3,projectile_protection:4,
-  respiration:5,aqua_affinity:6,thorns:7,depth_strider:8,frost_walker:9,
-  sharpness:16,smite:17,bane_of_arthropods:18,knockback:19,fire_aspect:20,looting:21,sweeping_edge:22,
-  efficiency:32,silk_touch:33,unbreaking:34,fortune:35,
-  power:48,punch:49,flame:50,infinity:51,
-  luck_of_the_sea:61,lure:62,
-  loyalty:65,impaling:66,riptide:67,channeling:68,
-  multishot:33,quick_charge:35,piercing:34,
-  mending:70,curse_of_vanishing:71,curse_of_binding:10,soul_speed:11,swift_sneak:12
-};
 
 function updateEnchOutput(){
   const ms=document.getElementById('mat-select');
@@ -1176,35 +1354,27 @@ function updateEnchOutput(){
 
   let cmd='';
   if(version==='modern'){
-    /* 1.18+ формат: /give @s minecraft:item{display:{Name:'{"text":"..."}'},Enchantments:[{id:"minecraft:X",lvl:Ns}]} count */
-    let nbtParts=[];
-    if(customName) nbtParts.push(`display:{Name:'{"text":"${customName}"}'}`) ;
-    if(keys.length) nbtParts.push(`Enchantments:[${keys.map(k=>`{id:"minecraft:${k}",lvl:${selectedEnch[k]}s}`).join(',')}]`);
-    const nbt=nbtParts.length?`{${nbtParts.join(',')}}`:'' ;
-    cmd=`/give @s minecraft:${mcId}${nbt} ${count}`;
+    if(keys.length){
+      cmd=`/give @s minecraft:${mcId}[enchantments={levels:{${keys.map(k=>`"minecraft:${k}":${selectedEnch[k]}`).join(',')}}}`+(customName?`,custom_name='{"text":"${customName}"}'`:'')+`] ${count}`;
+    } else {
+      cmd=`/give @s minecraft:${mcId}[custom_name='{"text":"${customName}"}'] ${count}`;
+    }
   } else if(version==='pe'){
-    /* Bedrock/PE: /give @s item count 0 {display:{Name:"..."},ench:[{id:"X",lvl:N}]} */
-    let nbtParts=[];
-    if(customName) nbtParts.push(`display:{Name:"${customName}"}`);
-    if(keys.length) nbtParts.push(`ench:[${keys.map(k=>`{id:"${k}",lvl:${selectedEnch[k]}}`).join(',')}]`);
-    const nbt=nbtParts.length?` {${nbtParts.join(',')}}`:'' ;
-    cmd=`/give @s ${mcId} ${count} 0${nbt}`;
+    let enchStr=keys.map(k=>`{"id":"${k}","lvl":${selectedEnch[k]}}`).join(',');
+    let nameStr=customName?`"display":{"Name":"${customName}"},`:'';
+    let tag=nameStr+(keys.length?`"ench":[${enchStr}]`:'');
+    cmd=`/give @s ${mcId} ${count} 0 {${tag}}`;
   } else {
-    /* Legacy 1.8: числовые ID, /give @p item count 0 {display:{Name:"..."},ench:[{id:NUM,lvl:Ns}]} */
-    let nbtParts=[];
-    if(customName) nbtParts.push(`display:{Name:"${customName}"}`);
-    if(keys.length) nbtParts.push(`ench:[${keys.map(k=>`{id:${ENCH_IDS[k]??0},lvl:${selectedEnch[k]}s}`).join(',')}]`);
-    const nbt=nbtParts.length?` {${nbtParts.join(',')}}`:'' ;
-    cmd=`/give @p ${mcId} ${count} 0${nbt}`;
+    let enchStr=keys.map(k=>`{id:${k},lvl:${selectedEnch[k]}s}`).join(',');
+    let nameStr=customName?`display:{Name:"${customName}"},`:'';
+    let tag=nameStr+(keys.length?`ench:[${enchStr}]`:'');
+    cmd=`/give @s ${mcId} ${count} 0 {${tag}}`;
   }
   box.textContent=cmd;
-  box.classList.add('has-cmd');
-  /* Анимация появления команды */
-  box.classList.remove('cmd-appear');void box.offsetWidth;box.classList.add('cmd-appear');
 }
 
 function removeEnch(key){delete selectedEnch[key];renderEnchList();updateEnchOutput();}
-function clearEnch(){selectedEnch={};renderEnchList();updateEnchOutput();document.getElementById('ename-input').value='';document.getElementById('ench-count').value=1;const box=document.getElementById('ench-cmd-box');box.classList.remove('has-cmd','cmd-appear');}
+function clearEnch(){selectedEnch={};renderEnchList();updateEnchOutput();document.getElementById('ename-input').value='';document.getElementById('ench-count').value=1;}
 function copyEnch(){
   const t=document.getElementById('ench-cmd-box').textContent;
   if(!t||t.includes('Выбери'))return;
@@ -1214,17 +1384,6 @@ function copyEnch(){
     const b=document.getElementById('copybtn-ench');
     b.classList.add('flash');
     setTimeout(()=>b.classList.remove('flash'),1800);
-    /* Sparkle burst */
-    const rect=b.getBoundingClientRect();
-    ['✨','⚡','💫','🌟','✦'].forEach((s,i)=>{
-      const el=document.createElement('div');el.className='copy-burst';
-      el.textContent=s;
-      el.style.left=(rect.left+rect.width/2+((i-2)*22))+'px';
-      el.style.top=(rect.top-10)+'px';
-      el.style.animationDelay=(i*.06)+'s';
-      document.body.appendChild(el);
-      setTimeout(()=>el.remove(),900);
-    });
   });
 }
 
@@ -1232,6 +1391,232 @@ function copyEnch(){
 setDir('north');setVersion('modern');
 pickItem(document.querySelector('.ibtn.active'),'sword','Меч','⚔','weapon');
 generate();
+
+/* ══ SECRET ACCESS SYSTEM ══ */
+let secAttempts=0;
+const SEC_CODE='2007';
+
+function openSecModal(){
+  document.getElementById('sec-overlay').classList.add('open');
+  document.getElementById('sec-pass').value='';
+  document.getElementById('sec-status').textContent='';
+  document.getElementById('sec-status').className='sec-status';
+  setTimeout(()=>document.getElementById('sec-pass').focus(),200);
+}
+function closeSecModal(){
+  document.getElementById('sec-overlay').classList.remove('open');
+}
+function checkOverlayClose(e){
+  if(e.target===document.getElementById('sec-overlay')) closeSecModal();
+}
+
+function checkSecPass(){
+  const val=document.getElementById('sec-pass').value.trim();
+  const st=document.getElementById('sec-status');
+
+  if(val===SEC_CODE){
+    secAttempts++;
+    if(secAttempts<4){
+      // False denial system — first 3 correct attempts show error
+      const msgs=[
+        'ERR_AUTH: access_level insufficient',
+        'ERR_AUTH: token expired · retry',
+        'ERR_AUTH: server refused connection'
+      ];
+      st.className='sec-status err';
+      st.textContent=msgs[secAttempts-1]||'ERR_AUTH: denied';
+      document.getElementById('sec-pass').value='';
+      return;
+    }
+    // 4th correct attempt — unlock
+    st.className='sec-status ok';
+    st.textContent='ACCESS GRANTED · loading module...';
+    setTimeout(()=>{
+      closeSecModal();
+      const tab=document.getElementById('ntab-secret');
+      tab.className='ntab visible';
+      switchPage('secret');
+      generateDM();
+      updateMobCmd();
+      showToast('⚠ Секретный раздел разблокирован!');
+      secAttempts=0;
+    },800);
+  } else {
+    // Wrong password — fake ban
+    secAttempts=0;
+    closeSecModal();
+    const fb=document.getElementById('fakeban');
+    // randomize "IP"
+    document.getElementById('fakeban-ip').textContent=
+      `IP: ${Math.floor(Math.random()*200)+10}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)} · blocked`;
+    fb.classList.add('show');
+  }
+}
+
+/* ══ MOB GENERATOR ══ */
+let selectedMob='zombie', mobEffects=[];
+
+function selectMob(btn, id){
+  document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedMob=id;
+  playClick();
+  updateMobCmd();
+}
+
+function toggleMobEff(btn, eff){
+  playClick();
+  const idx=mobEffects.indexOf(eff);
+  if(idx>=0){mobEffects.splice(idx,1);btn.classList.remove('active');}
+  else{mobEffects.push(eff);btn.classList.add('active');}
+  updateMobCmd();
+}
+
+function updateMobCmd(){
+  const count=Math.max(1,Math.min(50,parseInt(document.getElementById('mob-count').value)||1));
+  const name=document.getElementById('mob-name').value.trim();
+  const helm=document.getElementById('mob-helm').value;
+  const weapon=document.getElementById('mob-weapon').value;
+
+  // Build NBT
+  let nbtParts=[];
+  if(name) nbtParts.push(`CustomName:'{"text":"${name}"}'`);
+
+  // Equipment arrays
+  let armorArr=['{}','{}','{}',helm?`{id:"minecraft:${helm}",Count:1b}`:'{}'];
+  let handArr=[weapon?`{id:"minecraft:${weapon}",Count:1b}`:'{}','{}'];
+  if(helm||weapon){
+    nbtParts.push(`ArmorItems:[${armorArr.join(',')}]`);
+    nbtParts.push(`HandItems:[${handArr.join(',')}]`);
+  }
+
+  // Effects
+  if(mobEffects.length>0){
+    const effStr=mobEffects.map(e=>`{Id:"minecraft:${e}",Amplifier:0b,Duration:999999}`).join(',');
+    nbtParts.push(`active_effects:[${effStr}]`);
+  }
+
+  const nbt=nbtParts.length?` {${nbtParts.join(',')}}`:'';
+
+  let cmds=[];
+  for(let i=0;i<count;i++){
+    cmds.push(`/summon ${selectedMob} ~ ~${i>0?i:''} ~${nbt}`);
+  }
+
+  const out=document.getElementById('mob-cmd-out');
+  out.textContent=count===1?cmds[0]:cmds.join('\n');
+}
+
+function copyMobCmd(){
+  const t=document.getElementById('mob-cmd-out').textContent;
+  navigator.clipboard.writeText(t).then(()=>{
+    playSuccess();showToast('🐉 Команда спавна скопирована!');
+  });
+}
+
+/* ══ DESTRUCTION MASTER ══ */
+let dmDir='north', dmBlockId='air';
+const DM_DIRS=['north','south','east','west','up','down','nw','ne','sw','se'];
+
+function setDmDir(d){
+  dmDir=d;
+  DM_DIRS.forEach(x=>{
+    const b=document.getElementById('dmd-'+x);
+    if(b) b.className='dm-dir-btn'+(x===d?' active':'');
+  });
+  generateDM();
+}
+
+function setDmBlock(btn,id){
+  document.querySelectorAll('.dm-bbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  dmBlockId=id;
+  document.getElementById('dm-custom-block').value='';
+  generateDM();
+}
+
+function onDmCustomBlock(el){
+  const v=el.value.trim();
+  if(v){
+    document.querySelectorAll('.dm-bbtn').forEach(b=>b.classList.remove('active'));
+    dmBlockId=v;
+    generateDM();
+  }
+}
+
+function getDmBlock(){
+  if(version==='pe') return dmBlockId;
+  return version==='modern'?'minecraft:'+dmBlockId:dmBlockId;
+}
+
+function generateDM(){
+  const x=parseInt(document.getElementById('dm-x').value)||0;
+  const y=parseInt(document.getElementById('dm-y').value)||64;
+  const z=parseInt(document.getElementById('dm-z').value)||0;
+  const sx=Math.max(1,parseInt(document.getElementById('dm-sx').value)||10);
+  const sy=Math.max(1,parseInt(document.getElementById('dm-sy').value)||10);
+  const sz=Math.max(1,parseInt(document.getElementById('dm-sz').value)||10);
+  const layers=Math.max(1,Math.min(100,parseInt(document.getElementById('dm-layers').value)||5));
+  const interval=Math.max(1,parseInt(document.getElementById('dm-interval').value)||2);
+  const blk=getDmBlock();
+
+  document.getElementById('dm-layer-count').textContent=layers;
+  document.getElementById('dm-timer-val').textContent=interval+'с';
+
+  // Direction offset per layer
+  const offsets={
+    north:[0,0,-1], south:[0,0,1], east:[1,0,0], west:[-1,0,0],
+    up:[0,1,0], down:[0,-1,0],
+    nw:[-1,0,-1], ne:[1,0,-1], sw:[-1,0,1], se:[1,0,1]
+  };
+  const [ox,oy,oz]=offsets[dmDir]||[0,0,-1];
+
+  // Setup scoreboard + commands
+  let lines=[];
+  lines.push(`# === DESTRUCTION MASTER ===`);
+  lines.push(`# Блок: ${blk} · Слоёв: ${layers} · Направление: ${dmDir.toUpperCase()}`);
+  lines.push(`# Интервал: ${interval}с/слой`);
+  lines.push(`#`);
+  lines.push(`# ШАГ 1: вставь в ОБЫЧНЫЙ командный блок:`);
+  lines.push(`/scoreboard objectives add dm_tick dummy`);
+  lines.push(`/scoreboard players set dm_run dm_tick 1`);
+  lines.push(`#`);
+  lines.push(`# ШАГ 2: вставь в REPEAT + ALWAYS ACTIVE блок:`);
+  lines.push(`/execute if score dm_run dm_tick matches 1 run scoreboard players add dm_count dm_tick 1`);
+  lines.push(`#`);
+  lines.push(`# ШАГ 3: по одному в CHAIN блоки (по порядку):`);
+
+  for(let i=0;i<layers;i++){
+    const triggerTick=(i+1)*interval*20; // 20 ticks/sec
+    const lx=x+ox*i;
+    const ly=y+oy*i;
+    const lz=z+oz*i;
+    const ex=lx+sx-1;
+    const ey=ly+sy-1;
+    const ez=lz+sz-1;
+    lines.push(`/execute if score dm_count dm_tick matches ${triggerTick} run fill ${lx} ${ly} ${lz} ${ex} ${ey} ${ez} ${blk}`);
+  }
+
+  // Reset after all layers
+  const totalTicks=layers*interval*20;
+  lines.push(`/execute if score dm_count dm_tick matches ${totalTicks}.. run scoreboard players set dm_run dm_tick 0`);
+  lines.push(`/execute if score dm_count dm_tick matches ${totalTicks}.. run scoreboard players reset @a dm_tick`);
+  lines.push(`#`);
+  lines.push(`# Готово! ${layers} слоёв · ${layers*interval}с общее время`);
+
+  document.getElementById('dm-out').textContent=lines.join('\n');
+}
+
+function copyDM(){
+  const t=document.getElementById('dm-out').textContent;
+  if(!t||t.startsWith('—')) return;
+  navigator.clipboard.writeText(t).then(()=>{
+    playSuccess();
+    showToast('💥 Команды скопированы!');
+    const b=document.getElementById('copybtn-dm');
+    b.classList.add('flash');setTimeout(()=>b.classList.remove('flash'),1800);
+  });
+}
 </script>
 </body>
 </html>
