@@ -147,6 +147,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 .dinput:focus{border-color:var(--green)}
 .dhint{font-size:11px;color:var(--text3);margin-top:4px;font-weight:500}
 
+
+/* ══ ORIGIN MODE BUTTONS ══ */
+.omode-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;cursor:pointer;color:var(--text2);transition:all .18s;font-family:var(--font-ui);text-transform:uppercase;user-select:none}
+.omode-btn:hover{color:var(--text)}
+.omode-btn.active{background:rgba(0,255,136,0.08);border-color:var(--green);color:var(--green);box-shadow:0 0 12px rgba(0,255,136,0.15)}
 /* ══ OUTPUT BOX ══ */
 .outbox{background:#030608;border:1px solid var(--border);border-radius:10px;padding:18px 20px;font-family:var(--font-code);font-size:15px;color:var(--green);min-height:64px;word-break:break-all;line-height:1.7;position:relative;white-space:pre-wrap;margin-bottom:12px;text-shadow:0 0 14px rgba(0,255,136,0.3);transition:box-shadow .3s}
 .outbox.multi{font-size:12px;min-height:100px}
@@ -568,9 +573,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-ui);font-size
 
   <div class="card">
     <div class="ctitle"><em>◈</em> Dimensions</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase">Origin:</span>
+      <button class="omode-btn active" id="omode-corner" onclick="setOriginMode('corner');playClick()">📐 From Corner</button>
+      <button class="omode-btn" id="omode-center" onclick="setOriginMode('center');playClick()">🎯 From Center</button>
+    </div>
     <div class="dgrid">
       <div class="dbox"><label id="lbl-l">LENGTH</label><input class="dinput" type="number" id="inp-l" value="10" min="1" oninput="generate()"><div class="dhint" id="hint-l">blocks forward</div></div>
-      <div class="dbox"><label>WIDTH</label><input class="dinput" type="number" id="inp-w" value="3" min="1" oninput="generate()"><div class="dhint">centered on player</div></div>
+      <div class="dbox"><label>WIDTH</label><input class="dinput" type="number" id="inp-w" value="10" min="1" oninput="generate()"><div class="dhint" id="hint-w">blocks wide (from corner)</div></div>
       <div class="dbox"><label id="lbl-h">HEIGHT</label><input class="dinput" type="number" id="inp-h" value="3" min="1" oninput="generate()"><div class="dhint">from feet level</div></div>
     </div>
   </div>
@@ -1124,22 +1134,44 @@ function getBlock(){
 }
 function fmt(n){return n===0?'~':n>0?'~'+n:'~'+n}
 function bc(x1,y1,z1,x2,y2,z2){return `/fill ${fmt(x1)} ${fmt(y1)} ${fmt(z1)} ${fmt(x2)} ${fmt(y2)} ${fmt(z2)} ${getBlock()}`}
-function wOff(w){const h=Math.floor(w/2);return[-h,w%2===0?h-1:h]}
+
+/* ══ ORIGIN MODE: 'corner' (от угла) | 'center' (от центра) ══ */
+let originMode='corner';
+function setOriginMode(m){
+  originMode=m;
+  document.getElementById('omode-corner').className='omode-btn'+(m==='corner'?' active':'');
+  document.getElementById('omode-center').className='omode-btn'+(m==='center'?' active':'');
+  const hw=document.getElementById('hint-w');
+  if(hw) hw.textContent=m==='corner'?'blocks wide (from corner)':'blocks wide (centered, no loss)';
+  generate();
+}
+
+/* Возвращает [начало, конец] смещения для оси шириной w.
+   corner: [0, w-1]  — область строится в + сторону от игрока
+   center: без потери блока — нечётное: [-floor(w/2), floor(w/2)]
+                              чётное:  [-(w/2), (w/2)-1]           */
+function wOff(w){
+  if(originMode==='corner') return [0, w-1];
+  const h=Math.floor(w/2);
+  return [-(h), w%2===0 ? h-1 : h];
+}
+
 function generate(){
   const L=Math.max(1,parseInt(document.getElementById('inp-l').value)||1);
   const W=Math.max(1,parseInt(document.getElementById('inp-w').value)||1);
   const H=Math.max(1,parseInt(document.getElementById('inp-h').value)||1);
-  const[wn,wp]=wOff(W);const[w2n,w2p]=wOff(H);
+  const[wn,wp]=wOff(W);
+  const[w2n,w2p]=wOff(H);
   const out=document.getElementById('cmd-out');let cmd='',fr='',to='',sz='';
-  if(direction==='north'){cmd=bc(wn,0,-1,wp,H-1,-L);fr=`${fmt(wn)} ~ ~-1`;to=`${fmt(wp)} ${fmt(H-1)} ${fmt(-L)}`;sz=`${W}×${H}×${L}`;}
+  if(direction==='north'){cmd=bc(wn,0,-(L),wp,H-1,-1);fr=`${fmt(wn)} ~ ${fmt(-L)}`;to=`${fmt(wp)} ${fmt(H-1)} ~-1`;sz=`${W}×${H}×${L}`;}
   else if(direction==='south'){cmd=bc(wn,0,1,wp,H-1,L);fr=`${fmt(wn)} ~ ~1`;to=`${fmt(wp)} ${fmt(H-1)} ${fmt(L)}`;sz=`${W}×${H}×${L}`;}
   else if(direction==='east'){cmd=bc(1,0,wn,L,H-1,wp);fr=`~1 ~ ${fmt(wn)}`;to=`${fmt(L)} ${fmt(H-1)} ${fmt(wp)}`;sz=`${L}×${H}×${W}`;}
-  else if(direction==='west'){cmd=bc(-1,0,wn,-L,H-1,wp);fr=`~-1 ~ ${fmt(wn)}`;to=`${fmt(-L)} ${fmt(H-1)} ${fmt(wp)}`;sz=`${L}×${H}×${W}`;}
+  else if(direction==='west'){cmd=bc(-L,0,wn,-1,H-1,wp);fr=`${fmt(-L)} ~ ${fmt(wn)}`;to=`~-1 ${fmt(H-1)} ${fmt(wp)}`;sz=`${L}×${H}×${W}`;}
   else if(direction==='up'){cmd=bc(wn,1,w2n,wp,L,w2p);fr=`${fmt(wn)} ~1 ${fmt(w2n)}`;to=`${fmt(wp)} ${fmt(L)} ${fmt(w2p)}`;sz=`${W}×${L}×${H}`;}
-  else if(direction==='down'){cmd=bc(wn,-1,w2n,wp,-L,w2p);fr=`${fmt(wn)} ~-1 ${fmt(w2n)}`;to=`${fmt(wp)} ${fmt(-L)} ${fmt(w2p)}`;sz=`${W}×${L}×${H}`;}
-  else if(direction==='nw'){cmd=bc(-1,0,-1,-L,H-1,-L);fr=`~-1 ~ ~-1`;to=`${fmt(-L)} ${fmt(H-1)} ${fmt(-L)}`;sz=`${L}×${H}×${L}`;}
-  else if(direction==='ne'){cmd=bc(1,0,-1,L,H-1,-L);fr=`~1 ~ ~-1`;to=`${fmt(L)} ${fmt(H-1)} ${fmt(-L)}`;sz=`${L}×${H}×${L}`;}
-  else if(direction==='sw'){cmd=bc(-1,0,1,-L,H-1,L);fr=`~-1 ~ ~1`;to=`${fmt(-L)} ${fmt(H-1)} ${fmt(L)}`;sz=`${L}×${H}×${L}`;}
+  else if(direction==='down'){cmd=bc(wn,-L,w2n,wp,-1,w2p);fr=`${fmt(wn)} ${fmt(-L)} ${fmt(w2n)}`;to=`${fmt(wp)} ~-1 ${fmt(w2p)}`;sz=`${W}×${L}×${H}`;}
+  else if(direction==='nw'){cmd=bc(-L,0,-L,-1,H-1,-1);fr=`${fmt(-L)} ~ ${fmt(-L)}`;to=`~-1 ${fmt(H-1)} ~-1`;sz=`${L}×${H}×${L}`;}
+  else if(direction==='ne'){cmd=bc(1,0,-L,L,H-1,-1);fr=`~1 ~ ${fmt(-L)}`;to=`${fmt(L)} ${fmt(H-1)} ~-1`;sz=`${L}×${H}×${L}`;}
+  else if(direction==='sw'){cmd=bc(-L,0,1,-1,H-1,L);fr=`${fmt(-L)} ~ ~1`;to=`~-1 ${fmt(H-1)} ${fmt(L)}`;sz=`${L}×${H}×${L}`;}
   else if(direction==='se'){cmd=bc(1,0,1,L,H-1,L);fr=`~1 ~ ~1`;to=`${fmt(L)} ${fmt(H-1)} ${fmt(L)}`;sz=`${L}×${H}×${L}`;}
   else if(direction==='up-north'){let ls=[];for(let i=0;i<L;i++)ls.push(bc(wn,i,-(i+1),wp,i+H-1,-(i+1)));cmd=ls.join('\n');out.className='outbox multi';fr=`step 1/${L}`;to=`step ${L}`;sz=`${W}×${H}×${L}`;out.textContent=cmd;setPrev(fr,to,sz);return;}
   else if(direction==='down-south'){let ls=[];for(let i=0;i<L;i++)ls.push(bc(wn,-i,i+1,wp,-(i+H-1),i+1));cmd=ls.join('\n');out.className='outbox multi';fr=`step 1/${L}`;to=`step ${L}`;sz=`${W}×${H}×${L}`;out.textContent=cmd;setPrev(fr,to,sz);return;}
